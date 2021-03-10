@@ -45,10 +45,11 @@ def _PreProcess(fname):
     train_label = Data[60:761, 4]
     test_data = Data[701:761, 4:8].reshape([1,60,4])
     val_label = Data[761:797, 4]
+    '''
     tra_D_p, tra_L_p = _pack(train_data, train_label, H)
     train_data_nor, test_data_nor = _nor(tra_D_p), _nor(test_data)
-    
-    return tra_D_p, tra_L_p, val_label, test_data
+    '''
+    return train_data, train_label, val_label, test_data
 
 #%% Test
 if __name__ == '__main__':
