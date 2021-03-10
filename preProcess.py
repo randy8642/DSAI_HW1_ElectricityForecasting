@@ -1,21 +1,14 @@
-if __name__ == '__main__':
-    #%% Packages
-    import argparse
-    import numpy as np
-    import pandas as pd
-    import os
-    
-    #%% Arg.
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--data',
-                        default='data_set.csv',
-                        help='input training data file name')
+#%% Packages
+import numpy as np
+import pandas as pd
+import os
 
-    args = parser.parse_args()
-    
+#%% Arg.
+def _PreProcess(fname):
+
     #%% Path
     fpath = "./data"
-    fname = "data_set.csv"
+    #fname = "training_data.csv"
     
     #%% Parameters
     H = 60
@@ -37,33 +30,27 @@ if __name__ == '__main__':
     
     def _nor(x):
         y = np.copy(x)
-        mean_x = np.mean(x, axis = 0)
-        std_x = np.std(x, axis = 0)
-        for i in range(len(x)):
-            for j in range(len(x[0])):
-                if std_x[j] != 0:
-                    y[i][j] = (x[i][j] - mean_x[j]) / std_x[j]
-        return y
-    
-    def _al_nor(x):
-        y = np.copy(x)
         for i in range(x.shape[0]):
-            y[i, :, :] = _nor(x[i, :, :])
+            min_x = np.min(x[i,:,:])
+            max_x = np.max(x[i,:,:])
+            nor = (x[i,:,:]-min_x) / (max_x-min_x)
+            y[i,:,:] = nor
         return y
+
             
     
     #%% Read csv
     Data = np.array(pd.read_csv(os.path.join(fpath, fname)))
-    train_data = Data[:701, 4:]
+    train_data = Data[:701, 4:8]
     train_label = Data[60:761, 4]
-    test_data = Data[701:761, 4:]
+    test_data = Data[701:761, 4:8].reshape([1,60,4])
     val_label = Data[761:797, 4]
-    
     tra_D_p, tra_L_p = _pack(train_data, train_label, H)
-    train_data_nor, test_data_nor = _al_nor(tra_D_p), _nor(test_data)
+    train_data_nor, test_data_nor = _nor(tra_D_p), _nor(test_data)
     
-    #%% Save
-    np.save("train_data.npy", train_data_nor)
-    np.save("train_label.npy", tra_L_p)
-    np.save("val_label.npy", val_label)
-    np.save("test_data.npy", test_data_nor)
+    return tra_D_p, tra_L_p, val_label, test_data
+
+#%% Test
+if __name__ == '__main__':
+    fname = "training_data.csv"
+    train_data_nor, tra_L_p, val_label, test_data_nor = _PreProcess(fname)
