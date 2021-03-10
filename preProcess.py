@@ -1,9 +1,15 @@
 import pandas as pd
+from datetime import datetime
+
 
 df = pd.read_csv('./data/台灣電力公司_過去電力供需資訊.csv')
 
+df['weekcount'] = [datetime.strptime(str(a), "%Y%m%d").isocalendar()[1] for a in df['日期'].values] 
+df['daycount'] = [datetime.strptime(str(a), "%Y%m%d").isocalendar()[2] for a in df['日期'].values]
 
+print(df)
 
+exit()
 df['年'] = [int(str(a)[:4]) for a in df['日期'].values]
 df['月'] = [int(str(a)[4:6]) for a in df['日期'].values]
 df['日'] = [int(str(a)[6:8]) for a in df['日期'].values]
