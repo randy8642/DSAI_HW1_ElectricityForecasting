@@ -18,6 +18,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 import torch.optim as optim
+import pandas as pd
 import time
 from model import model_01
 from preProcess import _PreProcess
@@ -29,22 +30,31 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 #%% Parameters
 batch = 8
-lr = 1e-20
-Epoch = 30
+lr = 1e-2
+the = 180
+acc = 0
+Epoch = 1000000
+
+#%% Functions
+def _RMSE(pred, val):
+    mse = ((pred[:8] - val)**2).mean()
+    rmse = np.sqrt(mse)
+    return rmse
 
 #%% Get Data
-train_data_nor, tra_L_p, val_label, test_data_nor = _PreProcess(args.training)
+TRA_data, TRA_label, TES_data, L_min, L_max, val_label = _PreProcess(args.training)
 
 #%% Dataset
-train_data = torch.from_numpy(train_data_nor).type(torch.FloatTensor)
-train_label = torch.from_numpy(tra_L_p).type(torch.FloatTensor)
-test_data = torch.from_numpy(test_data_nor).type(torch.FloatTensor)
+train_data = torch.from_numpy(TRA_data).type(torch.FloatTensor)
+train_label = torch.from_numpy(TRA_label).type(torch.FloatTensor)
+test_data = torch.from_numpy(TES_data).type(torch.FloatTensor)
 
 train_dataset = torch.utils.data.TensorDataset(train_data, train_label)
 train_dataloader = torch.utils.data.DataLoader(dataset = train_dataset, batch_size=batch, shuffle=True)
 
+
 #%% Train
-model = model_01(4, 20, 3)
+model = model_01(30,2)
 optim = optim.Adam(model.parameters(), lr=lr)
 loss_f = nn.MSELoss()
 
@@ -53,24 +63,46 @@ loss_f.to(device)
 
 # Training
 print('\n------Training------')
-model.train()
 for epoch in range(Epoch):
-    for n, (Data, Label) in enumerate(train_dataloader):
-        optim.zero_grad()
-        data = Data
-        valid = Label
-        valid = valid.to(device)
+    if acc<the and epoch!=0:
+        break
+    else:
+        for n, (Data, Label) in enumerate(train_dataloader):
+            model.train()
+            optim.zero_grad()
+            data = Data
+            valid = Label
+            valid = valid.to(device)
+            data = data.to(device)
+    
+            pred = model(data)
+            
+            loss = loss_f(pred, valid)
+            
+            loss.backward()
+            optim.step()
+    
+        #print('\n------Val.------')
+        model.eval()
+        data = test_data
         data = data.to(device)
-
         pred = model(data)
-        
-        loss = loss_f(pred, valid)
-        
-        loss.backward()
-        optim.step()
-        
-    with torch.no_grad():
-        print('epoch[{}], loss:{:.4f}'.format(epoch+1, loss.item()))
+        PRED = (pred*(L_max-L_min) + L_min).cpu().data.numpy()
+        acc = _RMSE(PRED.squeeze(), val_label)
+        with torch.no_grad():
+            print('epoch[{}], loss:{:.4f}, val_acc:{:.4f}'.format(epoch+1, loss.item(), acc))
+    
+#%% Test
+Date = []
+for i in range(7):
+    Date.append(20210323+i)
+Value = PRED[:,22:29].squeeze()
+
+diction = {"Date": Date,
+           "Value": Value
+           }
+select_df = pd.DataFrame(diction)
+select_df.to_csv(args.output,index=0,header=0)
 
 '''
 model = ElectricityForecastingModel()
