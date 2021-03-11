@@ -1,8 +1,9 @@
 from model import ElectricityForecastingModel
 import torch
 import pandas as pd
+import numpy as np
 
-EPOCH = 30
+EPOCH = 200
 BATCH_SIZE = 32
 LEARNING_RATE = 1e-4
 
@@ -24,9 +25,13 @@ def main():
     # prepare dataset
     df = pd.read_csv(args.training)
     train_set = torch.from_numpy(
-        df[['year', 'month', 'day', 'supply', 'load']].values).type(torch.FloatTensor)
+        df[['year', 'weekcount', 'daycount', 'supply', 'load']].values[:700]).type(torch.FloatTensor)
     trainLoader = torch.utils.data.DataLoader(
         train_set, batch_size=BATCH_SIZE, shuffle=True)
+    test_set = torch.from_numpy(
+        df[['year', 'weekcount', 'daycount', 'supply', 'load']].values[700:]).type(torch.FloatTensor)
+    testLoader = torch.utils.data.DataLoader(
+        test_set, batch_size=BATCH_SIZE, shuffle=False)
 
     # model & opt & lossfunc
     model = ElectricityForecastingModel()
@@ -38,7 +43,7 @@ def main():
           optimizer=optimizer, lossFunction=loss_function)
 
     # PREDICT
-    a = predict()
+    a = predict(model=model, dataloader=testLoader)
 
 
 def train(model, dataloader, optimizer, lossFunction):
@@ -48,20 +53,18 @@ def train(model, dataloader, optimizer, lossFunction):
         model.train()
 
         for n, data in enumerate(dataloader):
-            year, month, day, supply, load = data[:,
-                                                  0], data[:, 1], data[:, 2], data[:, 3], data[:, 4]
+            year, weekcount, daycount, supply, load = data[:,
+                                                           0], data[:, 1], data[:, 2], data[:, 3], data[:, 4]
 
-            inputData = torch.cat(
-                (year.reshape(-1, 1), month.reshape(-1, 1), day.reshape(-1, 1)), dim=1)
-            targetData = torch.cat(
-                (supply.reshape(-1, 1), load.reshape(-1, 1)), dim=1)
+            weekcount = weekcount.type(torch.LongTensor)
+            daycount = daycount.type(torch.LongTensor)
 
-            pred = model(inputData)            
+            pred = model(year, weekcount, daycount)
 
             # Backward
             optimizer.zero_grad()
 
-            loss = lossFunction(pred, targetData) 
+            loss = lossFunction(pred, (supply- load)/10000)
 
             loss.backward()
 
@@ -73,9 +76,32 @@ def train(model, dataloader, optimizer, lossFunction):
     pass
 
 
-def predict():
+def predict(model, dataloader):
+    model.eval()
 
-    pass
+    pred = np.zeros([0, 1])
+    target = np.zeros([0, 1])
+    for n, data in enumerate(dataloader):
+        year, weekcount, daycount, supply, load = data[:,
+                                                       0], data[:, 1], data[:, 2], data[:, 3], data[:, 4]
+
+        weekcount = weekcount.type(torch.LongTensor)
+        daycount = daycount.type(torch.LongTensor)
+
+        out = model(year, weekcount, daycount)
+
+        out = out.detach().numpy().reshape(-1, 1)
+
+        pred = np.concatenate((pred, out), axis=0)
+        target = np.concatenate((target, ((supply- load)/10000).reshape(-1, 1)), axis=0)
+
+    print(pred.shape)
+    print(target.shape)
+
+    import matplotlib.pyplot as plt
+    plt.plot(pred)
+    plt.plot(target)
+    plt.show()
 
 
 if __name__ == '__main__':
