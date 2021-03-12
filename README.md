@@ -5,7 +5,7 @@ NCKU DSAI course homework
 * 說明連結\
 [Dropbox paper](https://www.dropbox.com/scl/fi/tx7md0teq0z4m3v20h5cp/DSAI-HW1-Electricity-Forecasting.paper?dl=0&rlkey=ajmzfqg0bjivr9bmcu8mqhv72)
 * 目標\
-預測2021/3/23至2021/3/29 台灣的電力備轉容量 單位為MW
+預測 2021/3/23 - 2021/3/29 台灣的電力備轉容量
 
 ## 環境
 * python 3.6.4
