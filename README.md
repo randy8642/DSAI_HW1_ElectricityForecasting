@@ -3,7 +3,7 @@ NCKU DSAI course homework
 
 ## 說明
 * 說明連結\
-[Dropbox paper](https://www.dropbox.com/scl/fi/tx7md0teq0z4m3v20h5cp/DSAI-HW1-Electricity-Forecasting.paper?dl=0&rlkey=ajmzfqg0bjivr9bmcu8mqhv72)
+[Dropbox paper](https://www.dropbox.com/scl/fi/tx7md0teq0z4m3v20h5cp/DSAI-HW1-Electricity-Forecasting.paper?dl=0&rlkey=ajmzfqg0bjivr9bmcu8mqhv72){:target="_blank"}
 * 目標\
 預測 2021/3/23 - 2021/3/29 台灣的電力備轉容量
 
