@@ -78,6 +78,8 @@ for idd, idx_n in enumerate(IDX_NAME_LIST):
                   'Mazu','Jinmen','Magong','Guanshan','Mailiao','Fugui Jiao']
     
     select_df = pd.DataFrame(F_idx_Data, index=Date, columns=Station_en)
-    select_df.to_csv(idx_n + ".csv")
+    sfname = idx_n + ".csv"
+    spath = './idx_data'
+    select_df.to_csv(os.path.join(spath,sfname))
     F_idx_Data = []
      
