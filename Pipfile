@@ -8,6 +8,7 @@ numpy = "==1.19.5"
 pandas = "==1.1.5"
 sklearn = "*"
 scipy = "==1.5.4"
+autopep8 = "*"
 
 [dev-packages]
 
