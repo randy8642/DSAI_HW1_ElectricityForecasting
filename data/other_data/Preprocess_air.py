@@ -13,11 +13,11 @@ from os import listdir
 path = './data'
 data_list = listdir(path)
 Data = np.array(pd.read_csv(os.path.join(path, data_list[0])))
-Station = []
 IDX_NAME_LIST = ['SO2', 'CO', 'O3', 'PM10', 'NOx', 'NO', 'NO2', 'THC', 'NMHC', 'WIND_SPEED',
                  'AMB_TEMP', 'CH4', 'PM2.5', 'RH', 'WS_HR']
-IDX_NAME_LIST = ['CO']
 
+#%% Get station name
+Station = []
 for i in range(84):
     A = np.array(np.where(Data[:,0]==i+1)).squeeze()
     if A.size==0:
@@ -25,6 +25,7 @@ for i in range(84):
     else:
         Station.append(Data[A[0], 1])
 
+#%% Get idx data
 for idd, idx_n in enumerate(IDX_NAME_LIST):
     Sta_Data = []
     idx_Data = []
@@ -67,6 +68,7 @@ for idd, idx_n in enumerate(IDX_NAME_LIST):
     F_idx_Data = np.array(F_idx_Data)
     F_idx_Data[F_idx_Data=='x'] = 0
     
+    #%% Save as csv
     Station_en = ['Keelung','Xizhi','Wanli','Xindian','Tucheng','Banqiao','Xinzhuang','Cailiao','Linkou','Dashui','Shilin', 
                   ' Zhongshan','Wanhua','Guting','Songshan','Datong','Taoyuan','Dayuan','Guanyin','Pingzhen','Longtan','Hukou',
                   'Zhudong ','Xinzhu','Toufen','Miaoli','Sanyi','Fengyuan','Shalu','Dali','Zhongming','Xitun','Changhua','Xianxi', 
