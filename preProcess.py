@@ -9,23 +9,6 @@ df = pd.concat([df_workday, df_ele], axis=1)
 df = df[['year', 'month', 'day', 'Day of the week', 'work', '備轉容量(MW)']]
 df['work'] = [1 if i else 0 for i in df['work']]
 
-import matplotlib.pyplot as plt
-
-data = df['備轉容量(MW)'].values
-fft = np.fft.fft(data)
-fftf = np.fft.fftfreq(data.shape[0])
-fft[abs(fftf) > 0.005] = 0
-d = np.fft.ifft(fft)
-
-plt.plot(np.fft.fftshift(np.fft.fftfreq(data.shape[0])),abs(np.fft.fftshift(np.fft.fft(data))))
-plt.show()
-plt.plot(d)
-plt.plot(data)
-plt.show()
-
-
-
-exit()
 
 train_x = np.zeros([0, 7, 6])
 train_y = np.zeros([0, 1])
