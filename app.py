@@ -1,5 +1,3 @@
-from model import ElectricityForecastingModel
-import torch
 import pandas as pd
 import numpy as np
 
@@ -25,22 +23,22 @@ def main():
 
     #　TRAIN
     import numpy as np
-    from sklearn.linear_model import SGDRegressor
-    from sklearn.pipeline import make_pipeline
-    from sklearn.preprocessing import StandardScaler
+    from sklearn.neural_network import MLPRegressor
     d = np.load('./data/trainData.npy')
-    x = d[:-5,:3]
-    y = d[:-5,-1:]
-    reg = make_pipeline(StandardScaler(),
-                    SGDRegressor(max_iter=1000, tol=1e-3))
+    n = 50
+    x = d[:-n,:-1]
+    y = d[:-n,-1:]
+    reg = MLPRegressor(random_state=1, max_iter=1000)
     reg.fit(x, y)
     # r2
     print(reg.score(x, y))
     
     # predict
-    print(np.round(reg.predict(d[-5:,:3])))
-    print(d[-5:,-1:].flatten())
+    print(round(reg.predict(d[-n:,:-1])))
+    print(d[-n:,-1:].flatten())
     
+    from sklearn.metrics import r2_score
+    print(r2_score(d[-n:,-1:].flatten(),(reg.predict(d[-n:,:-1]))))
 
 
 if __name__ == '__main__':
