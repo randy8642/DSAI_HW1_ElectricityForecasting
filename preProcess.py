@@ -9,12 +9,30 @@ df = pd.concat([df_workday, df_ele], axis=1)
 df = df[['year', 'month', 'day', 'Day of the week', 'work', '備轉容量(MW)']]
 df['work'] = [1 if i else 0 for i in df['work']]
 
-train = np.zeros([0, 7*6+1])
+import matplotlib.pyplot as plt
+
+data = df['備轉容量(MW)'].values
+fft = np.fft.fft(data)
+fftf = np.fft.fftfreq(data.shape[0])
+fft[abs(fftf) > 0.005] = 0
+d = np.fft.ifft(fft)
+
+plt.plot(np.fft.fftshift(np.fft.fftfreq(data.shape[0])),abs(np.fft.fftshift(np.fft.fft(data))))
+plt.show()
+plt.plot(d)
+plt.plot(data)
+plt.show()
+
+
+
+exit()
+
+train_x = np.zeros([0, 7, 6])
+train_y = np.zeros([0, 1])
 a = df.to_numpy()
 for n in range(0, a.shape[0]-7, 1):
-    input = a[n:n+7, :].flatten()
-    label = a[n+7, 5:]
-    t = np.concatenate((input, label), axis=0).reshape(1, -1)
-    train = np.concatenate((train, t), axis=0)
-print(train.shape)
-np.save('./data/trainData.npy', train)
+    train_x = np.concatenate((train_x, a[n:n+7, :].reshape(1, 7, 6)), axis=0)
+    train_y = np.concatenate((train_y, a[n+7, 5].reshape(1, 1)), axis=0)
+print(train_x.shape)
+print(train_y.shape)
+np.savez_compressed('./data/trainData', train_x=train_x,train_y=train_y)
