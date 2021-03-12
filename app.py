@@ -23,13 +23,12 @@ def main():
     args = parser.parse_args()
 
     # prepare dataset
-    df = pd.read_csv(args.training)
-    train_set = torch.from_numpy(
-        df[['year', 'weekcount', 'daycount', 'supply', 'load']].values[:700]).type(torch.FloatTensor)
+    # df = pd.read_csv(args.training)
+    data = np.load('./data/trainData.npy')
+    train_set = torch.from_numpy(data[:700]).type(torch.FloatTensor)
     trainLoader = torch.utils.data.DataLoader(
         train_set, batch_size=BATCH_SIZE, shuffle=True)
-    test_set = torch.from_numpy(
-        df[['year', 'weekcount', 'daycount', 'supply', 'load']].values[700:]).type(torch.FloatTensor)
+    test_set = torch.from_numpy(data[700:]).type(torch.FloatTensor)
     testLoader = torch.utils.data.DataLoader(
         test_set, batch_size=BATCH_SIZE, shuffle=False)
 
@@ -53,18 +52,16 @@ def train(model, dataloader, optimizer, lossFunction):
         model.train()
 
         for n, data in enumerate(dataloader):
-            year, weekcount, daycount, supply, load = data[:,
-                                                           0], data[:, 1], data[:, 2], data[:, 3], data[:, 4]
+            
 
-            weekcount = weekcount.type(torch.LongTensor)
-            daycount = daycount.type(torch.LongTensor)
+            
 
-            pred = model(year, weekcount, daycount)
+            pred = model()
 
             # Backward
             optimizer.zero_grad()
 
-            loss = lossFunction(pred, (supply- load)/10000)
+            loss = lossFunction(pred, (supply - load)/10000)
 
             loss.backward()
 
@@ -93,7 +90,8 @@ def predict(model, dataloader):
         out = out.detach().numpy().reshape(-1, 1)
 
         pred = np.concatenate((pred, out), axis=0)
-        target = np.concatenate((target, ((supply- load)/10000).reshape(-1, 1)), axis=0)
+        target = np.concatenate(
+            (target, ((supply - load)/10000).reshape(-1, 1)), axis=0)
 
     print(pred.shape)
     print(target.shape)
