@@ -12,14 +12,14 @@ df = pd.concat([df_workday, df_ele], axis=1)
 def filter(data):
     fft = np.fft.fft(data)
     fftf = np.fft.fftfreq(data.shape[0])
-    fft[abs(fftf) > 0.003] = 0
-    # fft[abs(fftf) < 0.002] = 0
-    return np.fft.ifft(fft)
+    # fft[abs(fftf) > 0.035] = 0
+    fft[abs(fftf) < 0.03] = 0
+    return np.fft.ifft(fft).real
 
 
 # PLOT
-plt.plot(filter(df['尖峰負載(MW)']), label='load(MW)')
-plt.plot(filter(df['淨尖峰供電能力(MW)']), label='supply(MW)')
+# plt.plot(filter(df['尖峰負載(MW)']), label='load(MW)')
+# plt.plot(filter(df['淨尖峰供電能力(MW)']), label='supply(MW)')
 plt.plot(filter(df['淨尖峰供電能力(MW)']) -
          filter(df['尖峰負載(MW)']), label='remain(MW)')
 plt.xticks(ticks=range(0, df['date'].shape[0], 30),

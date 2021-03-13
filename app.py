@@ -26,14 +26,14 @@ def main():
 
     #　TRAIN
     d = np.load('./data/trainData.npz')
-    train_x = torch.from_numpy(d['train_x'][:700]).type(torch.FloatTensor)
-    train_y = torch.from_numpy(d['train_y'][:700]).type(torch.FloatTensor)
+    train_x = torch.from_numpy(d['train_x'][:-7]).type(torch.FloatTensor)
+    train_y = torch.from_numpy(d['train_y'][:-7]).type(torch.FloatTensor)
     trainDataSet = data.TensorDataset(train_x, train_y)
     trainLoader = data.DataLoader(
         trainDataSet, batch_size=BATCH_SIZE, shuffle=True)
 
     model = m()
-    optimizer = optim.Adam(model.parameters(), lr=0.1)
+    optimizer = optim.Adam(model.parameters(), lr=0.01)
     lossFunction = nn.MSELoss()
 
     model.train()
@@ -52,23 +52,26 @@ def main():
     print('')
 
     # TEST
-    test_x = torch.from_numpy(d['train_x'][700:]).type(torch.FloatTensor)
-    test_y = torch.from_numpy(d['train_y'][700:]).type(torch.FloatTensor)
+    test_x = torch.from_numpy(d['train_x'][-7:]).type(torch.FloatTensor)
+    test_y = torch.from_numpy(d['train_y'][-7:]).type(torch.FloatTensor)
     testDataSet = data.TensorDataset(test_x, test_y)
     testLoader = data.DataLoader(
         testDataSet, batch_size=BATCH_SIZE, shuffle=False)
     with torch.no_grad():
         model.eval()
         pred = torch.zeros([0, 1])
-        for n, (x, y) in enumerate(testLoader):
+        for n, (x, y) in enumerate(trainLoader):
             out = model(x)
             pred = torch.cat((out, pred), dim=0)
 
-       
-        r2 = metrics.r2_score(y_true=test_y.numpy(), y_pred=pred.numpy())
+        r2 = metrics.r2_score(y_true=train_y.numpy(), y_pred=pred.numpy())
         print(test_y.numpy().flatten())
         print(pred.numpy().flatten())
         print(r2)
+        import matplotlib.pyplot as plt
+        plt.plot(train_y)
+        plt.plot(pred)
+        plt.show()
 
 
 class m(nn.Module):
@@ -85,6 +88,7 @@ class m(nn.Module):
         )
 
     def forward(self, x):
+        
         x = self.layers(x)
         return x
 

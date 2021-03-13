@@ -21,5 +21,5 @@ NCKU DSAI course homework
 
 
 ## 資料前處理
-
+將資料分為每周/每年學習
 ## 模型架構
