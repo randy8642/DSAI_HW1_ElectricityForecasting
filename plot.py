@@ -13,18 +13,21 @@ def filter(data):
     fft = np.fft.fft(data)
     fftf = np.fft.fftfreq(data.shape[0])
     # fft[abs(fftf) > 0.035] = 0
-    fft[abs(fftf) < 0.03] = 0
+    # fft[abs(fftf) < 0.03] = 0
     return np.fft.ifft(fft).real
 
 
-# PLOT
-# plt.plot(filter(df['尖峰負載(MW)']), label='load(MW)')
-# plt.plot(filter(df['淨尖峰供電能力(MW)']), label='supply(MW)')
-plt.plot(filter(df['淨尖峰供電能力(MW)']) -
-         filter(df['尖峰負載(MW)']), label='remain(MW)')
-plt.xticks(ticks=range(0, df['date'].shape[0], 30),
-           labels=df['date'][::30], rotation=45)
-plt.suptitle('filtered with 365days')
+# d = filter(df['淨尖峰供電能力(MW)']) - filter(df['尖峰負載(MW)'])
+d = df['尖峰負載(MW)'].values
+d = d[5:705].reshape(7, -1)
+
+
+plt.plot(d, label='', alpha=0.3)
+plt.plot(np.mean(d, axis=1), label='mean', alpha=1,linewidth=3,color='red')
+
+plt.xticks(ticks=np.arange(0, 7, 1), labels=np.arange(1, 8, 1))
+plt.xlabel('weekday')
+plt.ylabel('load(MW)')
 plt.legend(loc='upper right')
 plt.grid()
 plt.show()
