@@ -6,9 +6,11 @@ import torch.optim as optim
 import sklearn.metrics as metrics
 import matplotlib.pyplot as plt
 
-EPOCH = 2000
+EPOCH = 3000
 LEARNING_RATE = 1e-3
 
+def rmse(pred,true):
+    return np.sqrt(np.mean(np.power(pred-true,2)))
 
 def main():
     # You should not modify this part, but additional arguments are allowed.
@@ -26,17 +28,18 @@ def main():
 
     #　TRAIN
     d = np.load('./data/trainData.npz', allow_pickle=True)
-    trainTestCut = 1
+    trainTestCut = 4
     train_x = torch.from_numpy(d['train_x'][:-trainTestCut, :]).type(torch.FloatTensor)
     train_y = torch.from_numpy(d['train_y'][:-trainTestCut, :]).type(torch.FloatTensor)
     test_x = torch.from_numpy(d['train_x'][-trainTestCut:, :]).type(torch.FloatTensor)
     test_y = torch.from_numpy(d['train_y'][-trainTestCut:, :]).type(torch.FloatTensor)
 
     model = nn.Sequential(
-        nn.Linear(14, 100),
+        nn.Linear(14, 20),
         nn.ReLU(),
-           
-        nn.Linear(100, 7),
+        nn.Linear(20, 20),
+        nn.ReLU(),
+        nn.Linear(20, 7),
     )
     optimizer = optim.Adam(model.parameters(), lr=LEARNING_RATE)
     lossFunction = nn.MSELoss()
@@ -65,8 +68,8 @@ def main():
     test_y = test_y.flatten()
     
 
-    from sklearn.metrics import r2_score
-    print(r2_score(test_y, pred_y))
+    
+    print(rmse(test_y, pred_y))
     
     plt.plot(pred_y, label='pred')
     plt.plot(test_y, label='true')
