@@ -128,3 +128,4 @@ dmypy.json
 # Pyre type checker
 .pyre/
 *.npy
+data/~$data_set_xx.xlsx
