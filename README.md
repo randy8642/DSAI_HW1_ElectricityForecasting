@@ -21,13 +21,7 @@ NCKU DSAI course homework
 
 ## 分析
 ### 圖表
-* 一週中變化
-    * 淨尖峰供電能力(MW)\
-    ![supply_in_week](/img/supply_in_week.png)
-    * 尖峰負載(MW)\
-    ![load_in_week](/img/load_in_week.png)
-    * 備轉容量(MW)\
-    ![remain_in_week](/img/remain_in_week.png)
+![](/img/supply_load_remain.png)
 
 
 ## 資料前處理

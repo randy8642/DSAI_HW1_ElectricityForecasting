@@ -15,18 +15,21 @@ def filter(data):
     return np.fft.ifft(fft).real
 
 
-# d = filter(df['備轉容量(MW)'])
-d = (df['備轉容量(MW)']).values
+d = filter(df['備轉容量(MW)'])
+# d = (df['備轉容量(MW)']).values
+
+
 plt.plot(d)
 plt.show()
 
 exit()
-aaa = np.zeros([7, 0])
-for n in range(0, 784, 7):
-    aaa = np.concatenate((aaa, d[n:n+7].reshape(7, 1)), axis=1)
-# d = d[6:783].reshape(7, -1)
+aaa = np.zeros([0,7])
+for n in np.arange(0, 777, 7):
+    aaa = np.concatenate((aaa, (d[n+7:n+7+7]-d[n:n+7].mean()).reshape(1,7)), axis=0)
+print(aaa)
 
-plt.plot(aaa)
+
+plt.plot(aaa.T)
 plt.xticks(ticks=range(7), labels=[
            'Tue.', 'Wen.', 'Thur.', 'Fri.', 'Sat.', 'Sun.', 'Mon.'])
 plt.suptitle('Remain(MW)')
