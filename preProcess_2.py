@@ -32,17 +32,10 @@ def _PreProcess(fname):
     
     def _norLabel(label):
         y = np.copy(label)
-        min_MW = np.min(y)
-        max_MW = np.max(y)
-        y = (label-min_MW) / (max_MW-min_MW)
-        return y, min_MW, max_MW
-    
-    def _Fminmax(x1, x2):
-        x = np.concatenate((x1,x2))
-        min_x = np.min(x)
-        max_x = np.max(x)
-        return min_x, max_x
-        
+        mu = np.mean(y)
+        std = np.std(y)
+        y = (label-mu) / std
+        return y, mu, std
     
     #%% Read csv
     Data = np.array(pd.read_csv(os.path.join(fpath, fname)))
@@ -56,16 +49,16 @@ def _PreProcess(fname):
     val_nor_data = _norData(val_un_data)
     test_nor_data = _norData(test_un_data)
     
-    train_nor_label, L_min, L_max = _norLabel(train_un_label)
+    train_nor_label, mu, std = _norLabel(train_un_label)
     val_nor_label, _, _ = _norLabel(val_un_label)
         
     train_data = _pack(train_nor_data, H)
     val_data = _pack(val_nor_data, H)
     test_data = _pack(test_nor_data, H)
     
-    return train_data, train_un_label, val_data, val_un_label, test_data, L_min, L_max
+    return train_data, train_un_label, val_data, val_un_label, test_data, mu, std
 
 #%% Test
 if __name__ == '__main__':
     fname = "training_data.csv"
-    train_data, train_nor_label, val_data, val_nor_label, test_data, L_min, L_max = _PreProcess(fname)
+    train_data, train_nor_label, val_data, val_nor_label, test_data, mu, std = _PreProcess(fname)
