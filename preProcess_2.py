@@ -63,7 +63,7 @@ def _PreProcess(fname):
     val_data = _pack(val_nor_data, H)
     test_data = _pack(test_nor_data, H)
     
-    return train_data, train_nor_label, val_data, val_nor_label, test_data, L_min, L_max
+    return train_data, train_un_label, val_data, val_un_label, test_data, L_min, L_max
 
 #%% Test
 if __name__ == '__main__':

@@ -30,8 +30,8 @@ print(torch.device('cuda' if torch.cuda.is_available() else 'cpu'))
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 #%% Parameters
-batch = 8
-lr = 1e-1
+batch = 16
+lr = 100
 the = 180
 acc = 0
 Epoch = 1000000
@@ -57,7 +57,7 @@ train_dataloader = torch.utils.data.DataLoader(dataset = train_dataset, batch_si
 
 
 #%% Train
-model = model_01(30, 464)
+model = model_01(30,464)
 optim = optim.Adam(model.parameters(), lr=lr)
 loss_f = nn.MSELoss()
 
@@ -90,10 +90,10 @@ for epoch in range(Epoch):
         data = val_data
         data = data.to(device)
         pred = model(data)
-        VAL_PRED = (pred*(L_max) + L_min).cpu().data.numpy()
 # =============================================================================
-#         PRED = pred.cpu().data.numpy()        
+#         VAL_PRED = (pred*(L_max) + L_min).cpu().data.numpy()
 # =============================================================================
+        VAL_PRED = pred.cpu().data.numpy()        
         VAL_PRED = VAL_PRED.squeeze()
         acc = _RMSE(VAL_PRED, VAL_label)
         with torch.no_grad():
@@ -104,7 +104,10 @@ model.eval()
 data = test_data
 data = data.to(device)
 pred = model(data)
-PRED = (pred*(L_max) + L_min).cpu().data.numpy()
+# =============================================================================
+# PRED = (pred*(L_max) + L_min).cpu().data.numpy()
+# =============================================================================
+PRED = pred.cpu().data.numpy()
 
 Date = []
 for i in range(7):
