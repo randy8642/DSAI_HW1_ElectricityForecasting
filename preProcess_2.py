@@ -52,9 +52,9 @@ def _PreProcess(fname):
     train_nor_label, mu, std = _norLabel(train_un_label)
     val_nor_label, _, _ = _norLabel(val_un_label)
         
-    train_data = _pack(train_nor_data, H)
-    val_data = _pack(val_nor_data, H)
-    test_data = _pack(test_nor_data, H)
+    train_data = _pack(train_un_data, H)
+    val_data = _pack(val_un_data, H)
+    test_data = _pack(test_un_data, H)
     
     return train_data, train_un_label, val_data, val_un_label, test_data, mu, std
 
