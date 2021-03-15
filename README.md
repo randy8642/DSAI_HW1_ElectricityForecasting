@@ -19,6 +19,16 @@ NCKU DSAI course homework
 3. 執行\
 `python app.py --training training_data.csv --output submission.csv`
 
+## 分析
+### 圖表
+* 一週中變化
+    * 淨尖峰供電能力(MW)\
+    ![supply_in_week](/img/supply_in_week.png)
+    * 尖峰負載(MW)\
+    ![load_in_week](/img/load_in_week.png)
+    * 備轉容量(MW)\
+    ![remain_in_week](/img/remain_in_week.png)
+
 
 ## 資料前處理
 將資料分為每周/每年學習
