@@ -10,7 +10,7 @@ import pandas as pd
 import os
 from os import listdir
 
-path = './data'
+path = './air_data'
 data_list = listdir(path)
 Data = np.array(pd.read_csv(os.path.join(path, data_list[0])))
 IDX_NAME_LIST = ['SO2', 'CO', 'O3', 'PM10', 'NOx', 'NO', 'NO2', 'THC', 'NMHC', 'WIND_SPEED',
@@ -79,7 +79,7 @@ for idd, idx_n in enumerate(IDX_NAME_LIST):
     
     select_df = pd.DataFrame(F_idx_Data, index=Date, columns=Station_en)
     sfname = idx_n + ".csv"
-    spath = './idx_data'
+    spath = './air_idx_data'
     select_df.to_csv(os.path.join(spath,sfname))
     F_idx_Data = []
      
