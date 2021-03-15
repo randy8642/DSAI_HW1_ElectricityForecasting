@@ -34,7 +34,7 @@ Epoch = 1000000
 
 #%% Functions
 def _RMSE(pred, val):
-    mse = ((pred[:9] - val)**2).mean()
+    mse = ((pred - val)**2).mean()
     rmse = np.sqrt(mse)
     return rmse
 
