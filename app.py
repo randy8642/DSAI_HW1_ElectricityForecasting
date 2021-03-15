@@ -7,7 +7,7 @@ import sklearn.metrics as metrics
 import matplotlib.pyplot as plt
 
 EPOCH = 2000
-LEARNING_RATE = 1e-1
+LEARNING_RATE = 1e-3
 
 
 def main():
@@ -25,14 +25,18 @@ def main():
     args = parser.parse_args()
 
     #　TRAIN
-    d = np.load('./data/trainData.npz')
-    train_x = torch.from_numpy(d['train_x'][:-7]).type(torch.FloatTensor)
-    train_y = torch.from_numpy(d['train_y'][:-7]).type(torch.FloatTensor)
-
+    d = np.load('./data/trainData.npz', allow_pickle=True)
+    trainTestCut = 1
+    train_x = torch.from_numpy(d['train_x'][:-trainTestCut, :]).type(torch.FloatTensor)
+    train_y = torch.from_numpy(d['train_y'][:-trainTestCut, :]).type(torch.FloatTensor)
+    test_x = torch.from_numpy(d['train_x'][-trainTestCut:, :]).type(torch.FloatTensor)
+    test_y = torch.from_numpy(d['train_y'][-trainTestCut:, :]).type(torch.FloatTensor)
 
     model = nn.Sequential(
-        nn.Linear(4, 1),
-        nn.Flatten(0, 1)
+        nn.Linear(14, 100),
+        nn.ReLU(),
+           
+        nn.Linear(100, 7),
     )
     optimizer = optim.Adam(model.parameters(), lr=LEARNING_RATE)
     lossFunction = nn.MSELoss()
@@ -41,21 +45,34 @@ def main():
     for epoch in range(EPOCH):
         print(f'epoch {epoch+1}/{EPOCH}', end='\r')
 
-        pred = model(train_x)
+        pred = model(train_x[:,:14])
 
         optimizer.zero_grad()
         loss = lossFunction(pred, train_y)
         loss.backward()
         optimizer.step()
-        with torch.no_grad():
-            print(f'loss {loss.item()}')
+        # with torch.no_grad():
+        #     print(f'loss {loss.item()}')
     print('')
-    
 
     # TEST
-    y = model(train_x).detach().numpy()
-    plt.plot(train_x[:, 0], train_y)
-    plt.plot(train_x[:, 0], y)
+    scale = test_x[:,-1].numpy().reshape(trainTestCut,1)
+
+    pred_y = model(test_x[:,:14]).detach().numpy() * scale
+    test_y = test_y.numpy() * scale
+
+    pred_y = pred_y.flatten()
+    test_y = test_y.flatten()
+    
+
+    from sklearn.metrics import r2_score
+    print(r2_score(test_y, pred_y))
+    
+    plt.plot(pred_y, label='pred')
+    plt.plot(test_y, label='true')
+    plt.xticks(ticks=range(7*trainTestCut), labels=[
+               'Wen.', 'Thur.', 'Fri.', 'Sat.', 'Sun.', 'Mon.', 'Tue.']*trainTestCut)
+    plt.legend()
     plt.show()
 
 
