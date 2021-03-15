@@ -29,15 +29,15 @@ print(torch.device('cuda' if torch.cuda.is_available() else 'cpu'))
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 #%% Parameters
-batch = 8
-lr = 1e-2
+batch = 32
+lr = 10
 the = 180
 acc = 0
 Epoch = 1000000
 
 #%% Functions
 def _RMSE(pred, val):
-    mse = ((pred[:8] - val)**2).mean()
+    mse = ((pred[:9] - val)**2).mean()
     rmse = np.sqrt(mse)
     return rmse
 
@@ -54,7 +54,7 @@ train_dataloader = torch.utils.data.DataLoader(dataset = train_dataset, batch_si
 
 
 #%% Train
-model = model_01(30,2)
+model = model_01(30, 772)
 optim = optim.Adam(model.parameters(), lr=lr)
 loss_f = nn.MSELoss()
 
@@ -87,8 +87,12 @@ for epoch in range(Epoch):
         data = test_data
         data = data.to(device)
         pred = model(data)
-        PRED = (pred*(L_max-L_min) + L_min).cpu().data.numpy()
-        acc = _RMSE(PRED.squeeze(), val_label)
+# =============================================================================
+#         PRED = (pred*(L_max-L_min) + L_min).cpu().data.numpy()
+# =============================================================================
+        PRED = pred.cpu().data.numpy()        
+        PRED = PRED.squeeze()
+        acc = _RMSE(PRED, val_label)
         with torch.no_grad():
             print('epoch[{}], loss:{:.4f}, val_acc:{:.4f}'.format(epoch+1, loss.item(), acc))
     
@@ -96,7 +100,7 @@ for epoch in range(Epoch):
 Date = []
 for i in range(7):
     Date.append(20210323+i)
-Value = PRED[:,22:29].squeeze()
+Value = PRED[23:].squeeze()
 
 diction = {"Date": Date,
            "Value": Value
