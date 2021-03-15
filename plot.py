@@ -16,12 +16,12 @@ def filter(data):
 
 
 d = df['備轉容量(MW)'].values
-
+print( df.iloc[[6]])
 
 d = d[6:783].reshape(7, -1)
 
 # plt.plot(d)
 [b, c, d, e, f, g, h] = plt.plot(d.T)
-plt.legend([b, c, d, e, f, g, h], ['Wen.', 'Thur.', 'Fri.', 'Sat.', 'Sun.', 'Mon.', 'Tue.'], loc='upper right')
+plt.legend([b, c, d, e, f, g, h], [ 'Tue.','Wen.', 'Thur.', 'Fri.', 'Sat.', 'Sun.', 'Mon.'], loc='upper right')
 plt.suptitle('Remain(MW)')
 plt.show()
