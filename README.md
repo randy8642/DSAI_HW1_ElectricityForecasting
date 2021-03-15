@@ -19,11 +19,19 @@ NCKU DSAI course homework
 3. 執行\
 `python app.py --training training_data.csv --output submission.csv`
 
-## 分析
-### 圖表
+## 資料來源
+* [台灣電力公司_近三年每日尖峰備轉容量率](https://data.gov.tw/dataset/24945)
+    * 2014/01/01 - 2020/12/31
+* [台灣電力公司_過去電力供需資訊](https://data.gov.tw/dataset/19995)
+    * 2019/01/01 - 2021/01/31
+* [台灣電力公司_本年度每日尖峰備轉容量率](https://data.gov.tw/dataset/25850)
+    * 2021/01/01 - 當前
+
+## 前處理
+* 透過下列公式反推資料
+    * 備轉容量 = 系統運轉淨尖峰能力 - 系統瞬時尖峰負載
+    * 備轉容量率 = (備轉容量 ÷ 系統瞬時尖峰負載) × 100%
+
 ![](/img/supply_load_remain.png)
 
-
-## 資料前處理
-將資料分為每周/每年學習
 ## 模型架構
