@@ -1,3 +1,4 @@
+  
 # You should not modify this part, but additional arguments are allowed.
 import argparse
 
@@ -29,8 +30,8 @@ print(torch.device('cuda' if torch.cuda.is_available() else 'cpu'))
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 #%% Parameters
-batch = 32
-lr = 10
+batch = 8
+lr = 1e-4
 the = 180
 acc = 0
 Epoch = 1000000
@@ -55,7 +56,7 @@ train_dataloader = torch.utils.data.DataLoader(dataset = train_dataset, batch_si
 
 #%% Train
 model = model_01(30, 772)
-optim = optim.Adam(model.parameters(), lr=lr)
+optim = optim.SGD(model.parameters(), lr=lr)
 loss_f = nn.MSELoss()
 
 model.to(device)
@@ -87,10 +88,10 @@ for epoch in range(Epoch):
         data = test_data
         data = data.to(device)
         pred = model(data)
+        PRED = (pred*(L_max) + L_min).cpu().data.numpy()
 # =============================================================================
-#         PRED = (pred*(L_max-L_min) + L_min).cpu().data.numpy()
+#         PRED = pred.cpu().data.numpy()        
 # =============================================================================
-        PRED = pred.cpu().data.numpy()        
         PRED = PRED.squeeze()
         acc = _RMSE(PRED, val_label)
         with torch.no_grad():
@@ -113,5 +114,4 @@ model = ElectricityForecastingModel()
 model.train(df_training)
 df_result = model.predict(n_step=7)
 df_result.to_csv(args.output, index=0)
-
 '''

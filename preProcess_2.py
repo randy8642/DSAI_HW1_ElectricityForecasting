@@ -45,10 +45,10 @@ def _PreProcess(fname):
     
     def _norLabel(label):
         y = np.copy(label)
-        mu = np.mean(y)
-        std = np.std(y)
-        y = (label-mu) / std
-        return y, mu, std
+        min_MW = np.min(y)
+        max_MW = np.max(y)
+        y = (label-min_MW) / (max_MW-min_MW)
+        return y, min_MW, max_MW
     
     def _Fminmax(x1, x2):
         x = np.concatenate((x1,x2))
@@ -68,7 +68,7 @@ def _PreProcess(fname):
     test_nor_data = _norData(test_un_data)
     train_nor_label, L_min, L_max = _norLabel(train_un_label)
         
-    train_data, train_label = _pack(train_nor_data, train_nor_label, H)
+    train_data, train_label = _pack(train_nor_data, train_un_label, H)
     test_data = test_nor_data.reshape((1, H, -1))
     
     return train_data, train_label, test_data, L_min, L_max, val_label

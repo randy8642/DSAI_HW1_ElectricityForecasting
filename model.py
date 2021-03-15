@@ -8,10 +8,8 @@ class model_01(nn.Module):
         tot_len = H*in_sz
         self.FC = nn.Sequential(
             nn.Linear(tot_len, tot_len//16),
-            nn.LayerNorm(tot_len//16),
             nn.ReLU(),
             nn.Linear(tot_len//16, tot_len//128),
-            nn.LayerNorm(tot_len//128),
             nn.ReLU(),            
             nn.Linear(tot_len//128, 30)
             )
