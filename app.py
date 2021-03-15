@@ -41,7 +41,7 @@ def main():
         d['train_y'][-trainTestCut:, :]).type(torch.FloatTensor)
 
     model = nn.Sequential(
-        nn.Linear(1, 20),
+        nn.Linear(3, 20),
         nn.ReLU(),
         nn.Linear(20, 20),
         nn.ReLU(),
@@ -68,7 +68,7 @@ def main():
 
     pred_y = model(test_x[:, :]).detach().numpy()
     test_y = test_y.numpy()
-
+    print(test_x)
     pred_y = pred_y.flatten()
     test_y = test_y.flatten()
 
@@ -77,7 +77,7 @@ def main():
     plt.plot(pred_y, label='pred')
     plt.plot(test_y, label='true')
     plt.xticks(ticks=range(7*trainTestCut), labels=[
-               'Wen.', 'Thur.', 'Fri.', 'Sat.', 'Sun.', 'Mon.', 'Tue.']*trainTestCut)
+               'Fri.', 'Sat.', 'Sun.', 'Mon.', 'Tue.','Wen.', 'Thur.', ]*trainTestCut)
     plt.legend()
     plt.show()
 
