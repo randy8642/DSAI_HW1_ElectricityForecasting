@@ -19,11 +19,7 @@ train_y = np.zeros([0, 7])
 a = df.to_numpy()
 # n=6時為周二(2019/01/08)
 for n in range(6, a.shape[0]-8, 7):
-    tmp = np.concatenate(
-        (a[n+1: n+1+7, 0].reshape(1, 7), a[n+1:n+1+7, 1].reshape(1, 7),a[n:n+1,-1].reshape(1,1)), axis=1)
-    train_x = np.concatenate((train_x, tmp), axis=0)
-    train_y = np.concatenate(
-        (train_y, (a[n+1:n+1+7, -1:]/a[n,-1]).reshape(1, 7)), axis=0)
+    train_x = np.concatenate((train_x,a[n]))
 
 
 print(train_x.shape)
