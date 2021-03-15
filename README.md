@@ -20,8 +20,6 @@ NCKU DSAI course homework
 `python app.py --training training_data.csv --output submission.csv`
 
 ## 資料來源
-* [台灣電力公司_近三年每日尖峰備轉容量率](https://data.gov.tw/dataset/24945)
-    * 2014/01/01 - 2020/12/31
 * [台灣電力公司_過去電力供需資訊](https://data.gov.tw/dataset/19995)
     * 2019/01/01 - 2021/01/31
 * [台灣電力公司_本年度每日尖峰備轉容量率](https://data.gov.tw/dataset/25850)
