@@ -55,9 +55,11 @@ NCKU DSAI course homework
 預測結果
 1. 直接預測 備轉容量(MW)
     * RMSE = 142.0756
+
 ![prophet_predict_remain](/img/prophet_predict_remain.png)
 
 2. 預測尖峰負載(MW) 並轉換為備轉容量(MW)
     * 這邊假設備轉容量率固定為10%
     * RMSE = 187.1624
+    
 ![prophet_predict_load2remain](/img/prophet_predict_load2remain.png)
