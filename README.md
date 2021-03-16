@@ -46,9 +46,9 @@ NCKU DSAI course homework
 * Windows 10
     1. 安裝Microsoft C++ Build Tools \
         [下載連結](https://visualstudio.microsoft.com/zh-hant/visual-cpp-build-tools/)
-    2. `pip install numpy Cython`
-    3. `pip install pystan==2.17.1.0`
-    4. `pip install fbprophet==0.6`
+    2. `pip install pystan==2.17.1.0`
+    3. `pip install fbprophet==0.6`
+
 * Ubuntu 16.04.3 LTS
     1. 待補
 
