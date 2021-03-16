@@ -129,3 +129,4 @@ dmypy.json
 .pyre/
 *.npy
 data/~$data_set_xx.xlsx
+data/~$data_set_xx2.xlsx
