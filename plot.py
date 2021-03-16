@@ -20,7 +20,7 @@ def splitWeek(data):
         week = np.concatenate((week, data[i:i+7].reshape(1, -1)), axis=0)
     return week
 
-
+45616515
 d = splitWeek(df['淨尖峰供電能力(MW)'].values)
 
 # 移除平均
