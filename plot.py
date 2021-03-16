@@ -21,7 +21,7 @@ def splitWeek(data):
     return week
 
 
-d = splitWeek(df['備轉容量率(%)'].values)
+d = splitWeek(df['淨尖峰供電能力(MW)'].values)
 
 # 移除平均
 d = d - np.repeat(np.mean(d, axis=1, keepdims=True), 7, axis=1)
@@ -34,7 +34,7 @@ plt.xticks(ticks=np.arange(7), labels=['Mon.', 'Tue.', 'Wen.', 'Thur.', 'Fri.', 
 
 
 # plt.xticks(ticks=np.arange(804)[::20], labels=df['date'].values[::20], rotation=60, fontproperties=font_ticks)
-plt.title('備轉容量率(%)[當週] - 平均[當週]',fontproperties=font_title)
+plt.title('淨尖峰供電能力(MW)[當週] - 平均[當週]',fontproperties=font_title)
 plt.grid()
 # plt.legend(loc=1, prop=font_legend)
 plt.show()
