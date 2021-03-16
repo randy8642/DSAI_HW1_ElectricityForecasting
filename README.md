@@ -37,7 +37,11 @@ NCKU DSAI course homework
     2019/01/01 - 2021/02/28
 * test
     2021/03/01 - 2021/03/14
+### MLP
+* 待補
+
 ### ARIMA
+* 待補
 
 ### Prophet
 [官方網站](https://facebook.github.io/prophet/)\
