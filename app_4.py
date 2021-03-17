@@ -17,58 +17,87 @@ args = parser.parse_args()
 # You can modify it at will.
 import numpy as np
 import pandas as pd
-from sklearn.linear_model import LinearRegression
+import torch
+import torch.optim as optim
+import torch.nn as nn
 import time
 from preProcess_3 import _PreProcess
+from model import m01, m02, m03
 
 #%%
 tStart = time.time()
+print(torch.device('cuda' if torch.cuda.is_available() else 'cpu'))
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu') 
+
+#%% Parameters
+batch = 16
+lr = 1e-3
+the = 150
+val_rmse = 180
+Epoch = 1000000
 
 #%% Functions
 def _RMSE(pred, val):
-    mse = ((pred - val)**2).mean()
+    mse = ((pred.squeeze() - val.squeeze())**2).mean()
     rmse = np.sqrt(mse)
     return rmse
 
 #%% Get Data
 TRA_data, TRA_label, VAL_data, VAL_label, TES_data = _PreProcess(args.training)
+train_data = torch.from_numpy(TRA_data).type(torch.FloatTensor)
+train_label = torch.from_numpy(TRA_label).type(torch.FloatTensor)
+val_data = torch.from_numpy(VAL_data).type(torch.FloatTensor)
+val_label = VAL_label
+test_data = torch.from_numpy(TES_data).type(torch.FloatTensor)
+
+train_dataset = torch.utils.data.TensorDataset(train_data, train_label)
+train_dataloader = torch.utils.data.DataLoader(dataset = train_dataset, batch_size=batch, shuffle=True)
+
+
 
 #%% Train
-# model
-model = LinearRegression(fit_intercept=True)
-W = []
-B = []
-# Train
-for i in range(7):
-    data = TRA_data[str(i)]
-    label = TRA_label[str(i)]
-    bz = data.shape[0]
-    data = data.reshape(bz, -1)
-    
-    model.fit(data, label)
-    W.append(model.coef_)
-    B.append(model.intercept_)
-    
-# Val.
-P = []
-L = []
-for j in range(7):
-    data = VAL_data[str(j)].reshape(-1)
-    pred = np.dot(data, W[j]) + B[j]
-    P.append(pred)
-    L.append(VAL_label[str(j)])
-    
-VAL_RMSE = _RMSE(np.array(P), np.array(L))
-print("VAL_RMSE >>", VAL_RMSE)
-    
-'''
-# Val
-val_pred = np.dot(VAL_data.reshape(7, -1), w) + b
-VAL_RMSE = _RMSE(val_pred, VAL_label)
-print("VAL_RMSE >>", VAL_RMSE)
+#model = m01(3, 10, 30)
+model = m02(3, 30)
+optim = optim.Adam(model.parameters(), lr=lr)
+loss_F = nn.MSELoss()
 
+model.to(device)
+loss_F.to(device)
+
+print('\n------Training------')
+for epoch in range(Epoch):
+    if epoch>500 and val_rmse<the:
+        break
+    else:
+        model.train()
+        for n, (Data, Label) in enumerate(train_dataloader):
+            optim.zero_grad()
+            
+            Data = Data.to(device)
+            Label = Label.to(device)
+            Pred = model(Data)
+            loss = loss_F(Pred, Label)
+            
+            loss.backward()
+            optim.step()
+        
+        model.eval()
+        with torch.no_grad():
+             val_data = val_data.to(device)
+             
+             val_pred = model(val_data)
+             val_pred = val_pred.cpu().data.numpy()
+             
+             val_rmse = _RMSE(val_pred, val_label)
+             print('epoch[{}], loss >>{:.4f}, RMSE >>{:.4f}'.format(epoch+1, loss.item(), val_rmse))
+   
 #%% Test
-PRED = np.dot(TES_data.reshape(7, -1), w) + b
+print('\n------Testing------')        
+model.eval()
+with torch.no_grad():
+     test_data = test_data.to(device)
+     PRED = model(test_data)
+     PRED = PRED.cpu().data.numpy()
 
 Date = []
 for i in range(7):
@@ -76,9 +105,9 @@ for i in range(7):
 Value = PRED.squeeze()
 
 diction = {"Date": Date,
-           "Value": Value
+           "Value": Value[7:]
            }
 select_df = pd.DataFrame(diction)
 select_df.to_csv(args.output,index=0,header=0)
-'''
+
 
