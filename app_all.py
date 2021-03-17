@@ -121,7 +121,7 @@ elif args.model == 'sklearn':
     # Val
     val_pred = model.predict(VAL_data.reshape(1, -1))
     val_rmse = _RMSE(val_pred, val_label)
-    print("VAL_RMSE >>", val_rmse)
+    print("VAL_RMSE >>", round(val_rmse, 4))
     
     # Test
     print('\n------Testing------') 
