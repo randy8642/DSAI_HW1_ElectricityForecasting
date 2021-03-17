@@ -32,7 +32,7 @@ tStart = time.time()
 #%% Parameters
 batch = 16
 lr = 1e-3
-the = 140
+the = 120
 val_rmse = 180
 Epoch = 1000000
 
