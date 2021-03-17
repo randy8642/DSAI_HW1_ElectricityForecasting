@@ -62,7 +62,7 @@ elif args.plot == "Fig_02":
     plt.xticks(rotation=45)
     plt.grid(True)
     plt.tight_layout()
-    #plt.savefig("Fig_02.png")
+    plt.savefig("Fig_02.png")
     #plt.show()    
     
 

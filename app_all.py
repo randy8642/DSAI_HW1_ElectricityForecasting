@@ -12,7 +12,7 @@ parser.add_argument('--output',
                     help='output file name')
 
 parser.add_argument('-M', '--model',
-                    default='sklearn',
+                    default='pytorch',
                     help='type of model')
 
 
