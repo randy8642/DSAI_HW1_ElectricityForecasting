@@ -5,11 +5,11 @@ import os
 
 #%% Arg.
 def _PreProcess(fname):
-    #%% Path
+    # Path
     fpath = "./data"
     #fname = "training_data.csv"
     H = 30
-    #%% Functions
+    # Functions
     def _pack(data, H):
         D = []
         for i in range(data.shape[0]):
@@ -32,7 +32,7 @@ def _PreProcess(fname):
         D = np.array(D)
         return D    
 
-    #%% Read csv
+    # Read csv
     Data = np.array(pd.read_csv(os.path.join(fpath, fname)))
 
     # Data
@@ -43,6 +43,17 @@ def _PreProcess(fname):
     test_data = _pack(Data[774:804, 5:8], H)
 
     return train_data, train_label, val_data, val_label, test_data
+
+def _Plot(fname):
+    fpath = "./data"
+    Data = np.array(pd.read_csv(os.path.join(fpath, fname)))
+    MW = Data[:805, 4]
+    perc = Data[:805, 5]
+    PP_MW = Data[:805, 6]
+    P_MW = Data[:805, 7]
+    VAL_MW = Data[790:804, 4]
+    
+    return MW, perc, PP_MW, P_MW, VAL_MW
 
 #%% Test
 if __name__ == '__main__':

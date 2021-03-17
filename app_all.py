@@ -24,7 +24,7 @@ args = parser.parse_args()
 import numpy as np
 import pandas as pd
 import time
-from preProcess_3 import _PreProcess
+from PreProcess import _PreProcess
 
 #%%
 tStart = time.time()
@@ -114,8 +114,8 @@ elif args.model == 'sklearn':
     from sklearn.neural_network import MLPRegressor
     # Train
     print('\n------Training------')
-    model = MLPRegressor(random_state=1, hidden_layer_sizes=(2), activation="relu",solver='adam', batch_size=batch, learning_rate="constant",
-                         learning_rate_init=lr, max_iter=500)
+    model = MLPRegressor(random_state=1, hidden_layer_sizes=(4), activation="relu",solver='adam', batch_size=batch, learning_rate="constant",
+                         learning_rate_init=lr, max_iter=1000)
     model.fit(TRA_data.reshape(leng, -1), TRA_label)
     
     # Val
@@ -132,6 +132,8 @@ else:
     print("Could not use this model. See model list on README.")
 
 #%% Save
+np.save("val_pred.npy", val_pred)
+
 Date = []
 for i in range(7):
     Date.append(20210323+i)
