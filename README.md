@@ -53,7 +53,7 @@ NCKU DSAI course homework
 
 **預測結果**
 1. 預測 備轉容量(MW)
-    * RMSE = 142.0756
+    * RMSE = 142.6549
 
 ![prophet_predict_remain](/img/prophet_predict_remain.png)
 
