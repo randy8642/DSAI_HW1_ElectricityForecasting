@@ -4,7 +4,7 @@ import argparse
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-T','--training',
-                   default='training_data2.csv',
+                   default='training_data.csv',
                    help='input training data file name')
 
 parser.add_argument('--output',
