@@ -33,19 +33,3 @@ for n in range(0, test.count()-13, 7):
 print(testlabel.shape)
 regr = MLPRegressor(random_state=1, max_iter=1000).fit(traininput, trainlabel)
 pred = regr.predict(testinput)
-
-# PLOT
-fontPath = './data/NotoSansTC-Regular.otf'
-font_legend = fm.FontProperties(fname=fontPath, size=16)
-font_ticks = fm.FontProperties(fname=fontPath, size=11)
-font_title = fm.FontProperties(fname=fontPath, size=16)
-
-plt.plot(testlabel.flatten(), label='true')
-plt.plot(pred.flatten(), label='pred')
-
-rmse = np.round(np.sqrt(np.mean(np.power(pred.flatten()-testlabel.flatten(), 2))), 4)
-plt.title(f'{targetName}\nRMSE = {rmse}', fontproperties=font_title)
-plt.xticks(ticks=np.arange(forecastNum), labels=df['date'][-forecastNum:],
-           fontproperties=font_ticks, rotation=60)
-plt.legend(loc=1, prop=font_legend)
-plt.show()
