@@ -1,35 +1,25 @@
-import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
 from sklearn.neural_network import MLPRegressor
-import matplotlib.font_manager as fm
-
-forecastNum = 14
-targetName = '備轉容量(MW)'
-
-df = pd.read_csv('./data/electricity_data.csv')
 
 
+def forecastByMLP(trainData, predictNum=7):
+    '''
+    input DataFrame include ['ds', 'y']
+    '''
 
-# Create Training and Test
-train = df[targetName][:-forecastNum]
-test = df[targetName][-forecastNum-7:]
+    train = trainData['y']
 
-traininput = np.zeros([0, 7])
-trainlabel = np.zeros([0, 7])
-for n in range(0, train.count()-13, 7):
-    traininput = np.concatenate(
-        (traininput, train[n:n+7].values.reshape(1, -1)), axis=0)
-    trainlabel = np.concatenate(
-        (trainlabel, train[n+7:n+7+7].values.reshape(1, -1)), axis=0)
-testinput = np.zeros([0, 7])
-testlabel = np.zeros([0, 7])
-for n in range(0, test.count()-13, 7):
-    testinput = np.concatenate(
-        (testinput, test[n:n+7].values.reshape(1, -1)), axis=0)
-    testlabel = np.concatenate(
-        (testlabel, test[n+7:n+7+7].values.reshape(1, -1)), axis=0)
+    x = np.zeros([0, predictNum])
+    y = np.zeros([0, predictNum])
+    for n in range(0, train.count()-(predictNum*2-1), predictNum):
+        x = np.concatenate(
+            (x, train[n:n+predictNum].values.reshape(1, -1)), axis=0)
+        y = np.concatenate(
+            (y, train[n+predictNum:n+predictNum+predictNum].values.reshape(1, -1)), axis=0)
 
-print(testlabel.shape)
-regr = MLPRegressor(random_state=1, max_iter=1000).fit(traininput, trainlabel)
-pred = regr.predict(testinput)
+    test_x = train[-predictNum:].values.reshape(1, -1)
+
+    regr = MLPRegressor(random_state=1, max_iter=1000).fit(x, y)
+    pred = regr.predict(test_x)
+
+    return pred
