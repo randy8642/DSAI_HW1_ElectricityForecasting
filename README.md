@@ -15,7 +15,9 @@ NCKU DSAI course homework
 1. 進入專案資料夾\
 `cd /d [path/to/this/project]`
 2. 安裝套件\
-`pip install -r requirements.txt`
+    1. `sudo apt-get update`
+    2. `sudo apt-get install build-essential`
+    3. `pip install -r requirements.txt`
 3. 執行\
 `python app.py --training training_data.csv --output submission.csv`
 
@@ -40,11 +42,12 @@ NCKU DSAI course homework
 * Windows 10
     1. 安裝Microsoft C++ Build Tools \
         [下載連結](https://visualstudio.microsoft.com/zh-hant/visual-cpp-build-tools/)
-    2. `pip install pystan==2.17.1.0`
-    3. `pip install fbprophet==0.6`
+    2. `pip install pystan==2.17.1.0 fbprophet==0.6`
 
 * Ubuntu 16.04.3 LTS
-    1. 待補
+    1. `apt-get update`
+    2. `apt-get install build-essential`
+    3. `pip install pystan==2.17.1.0 fbprophet==0.6`
 
 **資料分析**
 
