@@ -32,7 +32,7 @@ tStart = time.time()
 #%% Parameters
 batch = 16
 lr = 1e-3
-the = 150
+the = 140
 val_rmse = 180
 Epoch = 1000000
 
@@ -51,8 +51,19 @@ if args.model == 'pytorch':
     import torch
     import torch.optim as optim
     import torch.nn as nn
+    import random
     from model import m02
     
+
+    def setup_seed(seed):
+        torch.manual_seed(seed)
+        torch.cuda.manual_seed_all(seed)
+        np.random.seed(seed)
+        random.seed(seed)
+        torch.backends.cudnn.deterministic = True
+     
+    setup_seed(20)
+
     train_data = torch.from_numpy(TRA_data).type(torch.FloatTensor)
     train_label = torch.from_numpy(TRA_label).type(torch.FloatTensor)
     val_data = torch.from_numpy(VAL_data).type(torch.FloatTensor)
