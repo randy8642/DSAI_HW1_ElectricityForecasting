@@ -34,7 +34,7 @@ batch = 16
 lr = 1e-3
 the = 120
 val_rmse = 180
-Epoch = 1000000
+Epoch = 1000
 
 #%% Functions
 def _RMSE(pred, val):
@@ -126,7 +126,7 @@ elif args.model == 'sklearn':
     # Train
     print('\n------Training------')
     model = MLPRegressor(random_state=1, hidden_layer_sizes=(4), activation="relu",solver='adam', batch_size=batch, learning_rate="constant",
-                         learning_rate_init=lr, max_iter=1000)
+                         learning_rate_init=lr, max_iter=Epoch)
     model.fit(TRA_data.reshape(leng, -1), TRA_label)
     
     # Val
