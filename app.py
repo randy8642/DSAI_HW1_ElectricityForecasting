@@ -1,9 +1,5 @@
 import numpy as np
-import sklearn.metrics as metrics
 import matplotlib.pyplot as plt
-
-EPOCH = 3000
-LEARNING_RATE = 1e-3
 
 
 def rmse(pred, true):

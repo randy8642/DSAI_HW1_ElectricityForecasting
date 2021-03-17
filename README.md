@@ -66,7 +66,7 @@ NCKU DSAI course homework
     
 ![prophet_predict_load2remain](/img/prophet_predict_load2remain.png)
 
-## 模型 - Prophet
+## 模型 - MLP
 
 **預測結果**
 1. 預測 備轉容量(MW)
