@@ -32,17 +32,11 @@ NCKU DSAI course homework
 
 ![](/img/supply_load_remain.png)
 
-## 模型
-* train
-    2019/01/01 - 2021/02/28
-* test
-    2021/03/01 - 2021/03/14
-### ARIMA
+## 模型 - Prophet
 
-### Prophet
-[官方網站](https://facebook.github.io/prophet/)\
-\
-安裝步驟(python 3.6.4)
+[Prophet官方網站](https://facebook.github.io/prophet/)
+
+**安裝步驟(python 3.6.4)**
 * Windows 10
     1. 安裝Microsoft C++ Build Tools \
         [下載連結](https://visualstudio.microsoft.com/zh-hant/visual-cpp-build-tools/)
@@ -52,7 +46,12 @@ NCKU DSAI course homework
 * Ubuntu 16.04.3 LTS
     1. 待補
 
-預測結果
+**資料分析**
+
+將資料拆解
+![prophet_analize_remain](/img/prophet_analize_remain.png)
+
+**預測結果**
 1. 直接預測 備轉容量(MW)
     * RMSE = 142.0756
 
