@@ -26,7 +26,7 @@ future = m.make_future_dataframe(periods=forecastNum)
 
 
 forecast = m.predict(future)
-
+forecast.to_csv('prephet_predict.csv')
 
 # PLOT
 df_forecast = forecast[['yhat']]
