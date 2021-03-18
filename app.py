@@ -1,4 +1,4 @@
-  
+
 # You should not modify this part, but additional arguments are allowed.
 import argparse
 
@@ -12,7 +12,7 @@ parser.add_argument('--output',
                     help='output file name')
 
 parser.add_argument('-M', '--model',
-                    default='prophet',
+                    default='sklearn',
                     help='type of model')
 
 
@@ -28,7 +28,7 @@ from PreProcess import _PreProcess, _PreProcess2
 
 #%%
 tStart = time.time()
-    
+
 #%% Parameters
 batch = 16
 lr = 1e-3
@@ -54,7 +54,7 @@ if args.model == 'pytorch':
     import torch.nn as nn
     import random
     from model import m02
-    
+
 
     def setup_seed(seed):
         torch.manual_seed(seed)
@@ -62,29 +62,29 @@ if args.model == 'pytorch':
         np.random.seed(seed)
         random.seed(seed)
         torch.backends.cudnn.deterministic = True
-     
+
     setup_seed(20)
 
     train_data = torch.from_numpy(TRA_data).type(torch.FloatTensor)
     train_label = torch.from_numpy(TRA_label).type(torch.FloatTensor)
     val_data = torch.from_numpy(VAL_data).type(torch.FloatTensor)
     test_data = torch.from_numpy(TES_data).type(torch.FloatTensor)
-    
+
     train_dataset = torch.utils.data.TensorDataset(train_data, train_label)
-    train_dataloader = torch.utils.data.DataLoader(dataset = train_dataset, batch_size=batch, shuffle=True)    
-    
+    train_dataloader = torch.utils.data.DataLoader(dataset = train_dataset, batch_size=batch, shuffle=True)
+
     # Device
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    print("Device >> ", device)    
-    
+    print("Device >> ", device)
+
     # Train
     model = m02(3, 30)
     optim = optim.Adam(model.parameters(), lr=lr)
     loss_F = nn.MSELoss()
-    
+
     model.to(device)
     loss_F.to(device)
-    
+
     print('\n------Training------')
     for epoch in range(Epoch):
         if epoch>500 and val_rmse<the:
@@ -93,33 +93,33 @@ if args.model == 'pytorch':
             model.train()
             for n, (Data, Label) in enumerate(train_dataloader):
                 optim.zero_grad()
-                
+
                 Data = Data.to(device)
                 Label = Label.to(device)
                 Pred = model(Data)
                 loss = loss_F(Pred, Label)
-                
+
                 loss.backward()
                 optim.step()
-            
+
             model.eval()
             with torch.no_grad():
                  val_data = val_data.to(device)
-                 
+
                  val_pred = model(val_data)
                  val_pred = val_pred.cpu().data.numpy()
-                 
+
                  val_rmse = _RMSE(val_pred, val_label)
-    
+
     print('epoch[{}], VAL_RMSE >>{:.4f}'.format(epoch+1, val_rmse))
-       
+
     # Test
-    print('\n------Testing------')        
+    print('\n------Testing------')
     model.eval()
     with torch.no_grad():
          test_data = test_data.to(device)
          PRED = model(test_data)
-         PRED = PRED.cpu().data.numpy()        
+         PRED = PRED.cpu().data.numpy()
 
 #%% Sklearn
 elif args.model == 'sklearn':
@@ -129,14 +129,14 @@ elif args.model == 'sklearn':
     model = MLPRegressor(random_state=1, hidden_layer_sizes=(4), activation="relu",solver='adam', batch_size=batch, learning_rate="constant",
                          learning_rate_init=lr, max_iter=Epoch)
     model.fit(TRA_data.reshape(leng, -1), TRA_label)
-    
+
     # Val
     val_pred = model.predict(VAL_data.reshape(1, -1))
     val_rmse = _RMSE(val_pred, val_label)
     print("VAL_RMSE >>", round(val_rmse, 4))
-    
+
     # Test
-    print('\n------Testing------') 
+    print('\n------Testing------')
     PRED = model.predict(TES_data.reshape(1, -1))
 
 
@@ -144,13 +144,13 @@ elif args.model == 'sklearn':
 elif args.model == 'prophet':
     from prophet import forecastByProphet
     # Train
-    print('\n------Training------')    
+    print('\n------Training------')
     val_pred = forecastByProphet(VAL_data2, 14)
     val_rmse = _RMSE(val_pred, val_label)
     print("VAL_RMSE >>", round(val_rmse, 4))
-    
+
     # Test
-    print('\n------Testing------') 
+    print('\n------Testing------')
     PRED = forecastByProphet(TES_data2, 14)
 
 #%% Else

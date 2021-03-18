@@ -109,16 +109,16 @@ NCKU DSAI course homework
 
 * 詳細模型參數以及架構如下，為一般的MLP：
 
-```python
-model = MLPRegressor(random_state=1,
-                    hidden_layer_sizes=(4),
-                    activation="relu",
-                    solver='adam',
-                    batch_size=16,
-                    learning_rate="constant",
-                    learning_rate_init=1e-3,
-                    max_iter=1000)
-```
+  ```python
+  model = MLPRegressor(random_state=1,
+                      hidden_layer_sizes=(4),
+                      activation="relu",
+                      solver='adam',
+                      batch_size=16,
+                      learning_rate="constant",
+                      learning_rate_init=1e-3,
+                      max_iter=1000)
+  ```
 
 * 使用validation data (2021/01/31 ~ 2021/03/01) 之預測值與實際值之RMSE為：\
 \
@@ -130,18 +130,100 @@ model = MLPRegressor(random_state=1,
 
 ### Pytorch
 
+* `python app.py --training training_data.csv --output submission.csv --model pytorch`
+
+* 同樣為一般的MLP架構，但其可變性較Sklearn高，\
+  亦可看見其訓練過程，並亦可使用GPU加速。\
+  然而此處我們省略了將每個epoch的loss print出來的部分。\
+  \
+  架構如下：
+  ```pyton
+  class m02(nn.Module):
+      def __init__(self, in_num, seq):
+          super(m02, self).__init__()
+          self.FC = nn.Sequential(
+              nn.Flatten(),
+              nn.Linear(in_num*seq, 64),
+              nn.ReLU(),
+              nn.Linear(64, 14)
+              )
+      def forward(self, x):
+          pred = self.FC(x)
+          return pred
+  ```
+
+  參數如下：
+
+  ```python
+  batch = 16
+  lr = 1e-3
+  Epoch = 1000
+  model = m02(3, 30)
+  loss_F = nn.MSELoss()
+  optim = optim.Adam(model.parameters(), lr=lr)
+  ```
+
+* 使用validation data (2021/01/31 ~ 2021/03/01) 之預測值與實際值之RMSE為：\
+\
+  **RMSE = 118.8234**
+
+  ![PT_RMSE](https://i.imgur.com/yA1GX9H.png)
+
+* 最終輸出檔名為：`pytorch_submission.csv`
+
 ### Prophet
 
-[官方網站](https://facebook.github.io/prophet/)\
+[官方網站](https://facebook.github.io/prophet/)
+
+* 安裝步驟 (python 3.6.4)
+
+  * Windows 10
+
+      1. 安裝Microsoft C++ Build Tools \
+          [下載連結](https://visualstudio.microsoft.com/zh-hant/visual-cpp-build-tools/)\
+          僅勾選"C++建置工具即可"
+
+          ![pic](https://i.imgur.com/s7YbNq4.png)
+
+      2. `pip install pystan==2.17.1.0 fbprophet==0.6`
+
+  * Ubuntu 16.04.3 LTS
+      1. `apt-get update`
+
+      2. `apt-get install build-essential`
+
+      3. `pip install pystan==2.17.1.0 fbprophet==0.6`
+
+* 此處的使用方式為，輸入過去數天的日期以及對應的數值，\
+  選擇輸出後幾天 (此處統一設定為後14天) 的數據，\
+  方可預測完成。
+
+  ```python
+  val_pred = forecastByProphet(VAL_data2, 14)
+  # VAL_data2: (time by data)
+  # val_pred: result of pred. (14)
+  ```
+
+* 使用validation data (2019/01/02 ~ 2021/03/01) 之預測值與實際值之RMSE為：\
 \
-安裝步驟(python 3.6.4)
+  **RMSE = 135.2348**
 
-* Windows 10
+  ![PR_RMSE](https://i.imgur.com/84gHKtf.png)
 
-    1. 安裝Microsoft C++ Build Tools \
-        [下載連結](https://visualstudio.microsoft.com/zh-hant/visual-cpp-build-tools/)
-    2. `pip install pystan==2.17.1.0`
-    3. `pip install fbprophet==0.6`
+* 最終輸出檔名為：`prophet_submission.csv`
 
-* Ubuntu 16.04.3 LTS
-    1. 待補
+### 小節
+
+從上述三張驗證集的預測軌跡看來，以**pytorch最為理想**，\
+故本次作業我們選用該預測結果當作最終答案，\
+即檔名為：`submission.csv`
+
+>實際上在此處我們使用了三個模型進行預測，\
+>若僅為了提高準確度，應可從資料中sample出三群dataset，\
+>進行預測之後再使用bagging，\
+>應可得到variance與bias皆較小的預測值。
+
+>另一方面，目前使用Prophet可得到長期趨勢，\
+>以及其他週期性方程式，未來若夠以Prophet預測趨勢，\
+>並以MLP等模型來預測其餘非線性的部分，\
+>說不定可以讓誤差進一步縮小

@@ -21,7 +21,7 @@ def _PreProcess(fname):
 
         D = np.array(D)
         return D
-    
+
     def _packL(label, H):
         D = []
         for i in range(label.shape[0]):
@@ -31,7 +31,7 @@ def _PreProcess(fname):
                 D.append(label[i:i+H])
 
         D = np.array(D)
-        return D    
+        return D
 
     # Read csv
     Data = np.array(pd.read_csv(os.path.join(fpath, fname)))
@@ -52,7 +52,7 @@ def _PreProcess2(fname):
     # Read csv
     df = pd.read_csv(os.path.join(fpath, fname))
     # Data
-    VAL_data = df.loc[:789, :]
+    VAL_data = df.loc[:789, :]    # time by data
     TES_data = df
 
     return VAL_data, TES_data
@@ -66,7 +66,7 @@ def _Plot(fname):
     PP_MW = Data[:805, 6]
     P_MW = Data[:805, 7]
     VAL_MW = Data[790:804, 4]
-    
+
     return MW, perc, PP_MW, P_MW, VAL_MW
 
 #%% Test
