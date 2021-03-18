@@ -12,7 +12,7 @@ parser.add_argument('--output',
                     help='output file name')
 
 parser.add_argument('-M', '--model',
-                    default='sklearn',
+                    default='pytorch',
                     help='type of model')
 
 
@@ -62,7 +62,7 @@ if args.model == 'pytorch':
         random.seed(seed)
         torch.backends.cudnn.deterministic = True
      
-    setup_seed(25)
+    setup_seed(20)
 
     train_data = torch.from_numpy(TRA_data).type(torch.FloatTensor)
     train_label = torch.from_numpy(TRA_label).type(torch.FloatTensor)
@@ -125,7 +125,7 @@ elif args.model == 'sklearn':
     from sklearn.neural_network import MLPRegressor
     # Train
     print('\n------Training------')
-    model = MLPRegressor(random_state=1, hidden_layer_sizes=(2), activation="relu",solver='adam', batch_size=batch, learning_rate="constant",
+    model = MLPRegressor(random_state=1, hidden_layer_sizes=(4), activation="relu",solver='adam', batch_size=batch, learning_rate="constant",
                          learning_rate_init=lr, max_iter=Epoch)
     model.fit(TRA_data.reshape(leng, -1), TRA_label)
     

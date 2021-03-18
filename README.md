@@ -64,7 +64,7 @@ NCKU DSAI course homework
 
 前處理方式可依模型分成下列兩種：
 * [PreProcess.py](LINK)
-    >training data的範圍從 2019/01/01 至 2021/02/15\
+    >training data的範圍從 2019/01/02 至 2021/02/15\
     >validation data的範圍從 2021/01/31 至 2021/03/01\
     >testing dara的範圍從 2021/02/14 至 2021/03/15
 
