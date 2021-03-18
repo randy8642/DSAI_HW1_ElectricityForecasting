@@ -63,27 +63,45 @@ NCKU DSAI course homework
 ## 前處理
 
 前處理方式可依模型分成下列兩種：
-* [PreProcess.py](LINK)
+* [PreProcess.__PreProcess](LINK)
     >training data的範圍從 2019/01/02 至 2021/02/15\
     >validation data的範圍從 2021/01/31 至 2021/03/01\
     >testing dara的範圍從 2021/02/14 至 2021/03/15
 
     上述資料依30天的間隔，以步進為一天的方式進行切割，\
-    目的是利用前30天的資料，預測後14天的資料。
+    目的是利用前30天的資料，預測後14天的資料。\
+    故各資料的維度如下：
+    |            | Training   | Validation | Testing  |
+    |------------|------------|------------|----------|
+    | Data Dim.  | (747,30,3) | (1,30,3)   | (1,30,3) |
+    | Label Dim. | (747,14)   | (14)       |          |
+
+* [PreProcess.__PreProcess2](LINK)
+    >validation data的範圍從 2019/01/02 至 2021/03/01\
+    >testing dara的範圍從 2019/01/02 至 2021/03/15
+
+    該處理方式為Prophet所設計，其輸入一段時間的資料 (**包含日期及資料**) 後，\
+    可輸出後14天的預測資料。\
+    同樣各資料的維度列表如下：
+    |            | Training | Validation | Testing |
+    |------------|----------|------------|---------|
+    | Data Dim.  |          | (790,3)    | (804,3) |
+    | Label Dim. |          | (14)       |         |
 
 ![](/img/supply_load_remain.png)
 
 ## 模型
 
-* train
-    2019/01/01 - 2021/02/28
-* test
-    2021/03/01 - 2021/03/14
-### MLP
-* 待補
+依使用套件的種類可分作下列幾種：
 
-### ARIMA
-* 待補
+### Sklearn
+
+* `python app.py --training training_data.csv --output submission.csv --model sklearn`
+* 使用validation data (2021/01/31 ~ 2021/03/01) 之預測值與實際值之RMSE為：\
+  RMSE = 143.4088
+  ![](https://i.imgur.com/lO29o5t.png)
+* 最終輸出檔名為：`sklearn_submission.csv`
+
 
 ### Prophet
 [官方網站](https://facebook.github.io/prophet/)\
