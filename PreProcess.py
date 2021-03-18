@@ -50,13 +50,12 @@ def _PreProcess2(fname):
     fpath = "./data"
     #fname = "training_data.csv"
     # Read csv
-    Data = np.array(pd.read_csv(os.path.join(fpath, fname)))
+    df = pd.read_csv(os.path.join(fpath, fname))
     # Data
-    train_data = Data[:790, 4]
-    val_label = Data[790:804, 4]
-    test_data = Data[:804, 4]
+    VAL_data = df.loc[:789, :]
+    TES_data = df
 
-    return train_data, val_label, test_data
+    return VAL_data, TES_data
 
 
 def _Plot(fname):

@@ -12,7 +12,7 @@ parser.add_argument('--output',
                     help='output file name')
 
 parser.add_argument('-M', '--model',
-                    default='pytorch',
+                    default='sklearn',
                     help='type of model')
 
 
@@ -44,6 +44,7 @@ def _RMSE(pred, val):
 
 #%% Get Data
 TRA_data, TRA_label, VAL_data, val_label, TES_data = _PreProcess(args.training)
+VAL_data2, TES_data2 = _PreProcess2("training_data2.csv")
 leng = TRA_data.shape[0]
 
 #%% Torch
@@ -142,7 +143,15 @@ elif args.model == 'sklearn':
 #%% Prophet
 elif args.model == 'prophet':
     from prophet import forecastByProphet
+    # Train
+    print('\n------Training------')    
+    VAL_pred = forecastByProphet(VAL_data2, 14)
+    val_rmse = _RMSE(VAL_pred, val_label)
+    print("VAL_RMSE >>", round(val_rmse, 4))
     
+    # Test
+    print('\n------Testing------') 
+    PRED = forecastByProphet(TES_data2, 14)
 
 #%% Else
 else:
