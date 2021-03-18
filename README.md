@@ -73,3 +73,7 @@ NCKU DSAI course homework
     * RMSE = 149.8179
 
 ![mlp_predict_remain](/img/mlp_predict_remain.png)
+
+## 未來
+目前使用Prophet可得到trend長期趨勢以及其他週期性方程式
+未來能夠以Prophet預測trend，並以MLP等模型來預測其餘非線性的部分，說不定可以讓誤差進一步縮小
