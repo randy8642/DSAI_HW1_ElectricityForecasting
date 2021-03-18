@@ -12,6 +12,6 @@ def forecastByProphet(trainData, predictNum):
     future = m.make_future_dataframe(periods=predictNum)
     forecast = m.predict(future)
 
-    output = forecast[['yhat']][-predictNum:].to_numpy()
+    output = forecast[['yhat']][-predictNum:].to_numpy().flatten()
 
     return output

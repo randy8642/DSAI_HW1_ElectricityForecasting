@@ -22,4 +22,4 @@ def forecastByMLP(trainData, predictNum=7):
     regr = MLPRegressor(random_state=1, max_iter=1000).fit(x, y)
     pred = regr.predict(test_x)
 
-    return pred
+    return pred.flatten()

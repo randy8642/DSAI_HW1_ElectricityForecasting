@@ -12,24 +12,53 @@ def main():
 
     parser = argparse.ArgumentParser()
     parser.add_argument('-T', '--training',
-                        default='./data/training_data.csv',
+                        default='trainingData.csv',
                         help='input training data file name')
 
     parser.add_argument('--output',
                         default='submission.csv',
                         help='output file name')
+
+    parser.add_argument('--model',
+                        default='mlp',
+                        help='')
+
+    parser.add_argument('--predict_num',
+                        default=7,
+                        help='')
+
     args = parser.parse_args()
 
     #　TRAIN
     import pandas as pd
-    df = pd.read_csv('./data/electricity_data.csv')
-    targetName = '備轉容量(MW)'
-    df = df[['date',  targetName]]
-    df = df.rename(columns={'date': 'ds', targetName: 'y'})
-    from predictModel.Prophet import forecastByProphet
-    pred = forecastByProphet(df, 7)
+    from datetime import datetime, timedelta
+    df = pd.read_csv(args.training)
+    num = args.predict_num
 
-    print(pred)
+    # GET DATE
+    trainLastDate = df['ds'].tail(1).values[0]
+    trainLastDate = datetime.strptime(trainLastDate, "%Y/%m/%d")
+
+    predDate = []
+    for n in np.arange(num):
+        n += 1
+        predDate.append(
+            (trainLastDate + timedelta(days=n)).strftime('%Y/%m/%d'))
+
+    # GET PREDICT
+    if args.model == 'prophet':
+        from predictModel.Prophet import forecastByProphet
+        pred = forecastByProphet(df, num)
+    elif args.model == 'mlp':
+        from predictModel.MLP import forecastByMLP
+        pred = forecastByMLP(df, num)
+
+    
+    # OUTPUT
+    pred = np.round(pred, 0)
+    df_pred = pd.DataFrame({'date': predDate, 'predict': pred})
+    
+    df_pred.to_csv(args.output)
 
 
 if __name__ == '__main__':
