@@ -49,12 +49,12 @@ NCKU DSAI course homework
 
 * 若將**淨尖峰供電能力**、**尖峰負載**以及**備轉容量率**依日期畫出趨勢圖，會呈以下現象：
     ![PPMW_PMW_%](https://i.imgur.com/XdUcAsU.png)
-    另外將**備轉容量率**、**淨尖峰供電能力**與**尖峰負載**以一週為單位作圖，如下所示：
-
+    另外將**備轉容量率**、**淨尖峰供電能力**與**尖峰負載**以一週為單位作圖，如下所示：\
+\
     ![%](https://i.imgur.com/L08hMCN.png)
     ![PPMW](https://i.imgur.com/65CXQb7.png)
     ![PMW](https://i.imgur.com/xlWnJfK.png)
-
+\
     可以發現除**備轉容量率**之外，其餘兩者在每週的變化趨勢皆有相似的特徵；\
     若將**備轉容量**依星期順序拆成七條不同的折線圖，可得：
 
