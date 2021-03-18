@@ -23,8 +23,8 @@ NCKU DSAI course homework
 3. 執行\
 `python app.py --training training_data.csv --output submission.csv --model [model name]`
       * model種類：
-         * pytoch
          * sklearn (default)
+         * pytoch
          * prophet
 
 ## 資料來源
