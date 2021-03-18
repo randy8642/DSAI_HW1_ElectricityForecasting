@@ -137,7 +137,7 @@ NCKU DSAI course homework
   然而此處我們省略了將每個epoch的loss print出來的部分。\
   \
   架構如下：
-  ```pyton
+  ```python
   class m02(nn.Module):
       def __init__(self, in_num, seq):
           super(m02, self).__init__()
