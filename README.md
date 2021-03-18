@@ -122,7 +122,7 @@ model = MLPRegressor(random_state=1,
 
 * 使用validation data (2021/01/31 ~ 2021/03/01) 之預測值與實際值之RMSE為：\
 \
-  $RMSE = 143.4088$
+  **RMSE = 143.4088**
 
   ![SK_RMSE](https://i.imgur.com/lO29o5t.png)
 
