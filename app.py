@@ -154,7 +154,8 @@ diction = {"Date": Date,
            "Value": Value[7:]
            }
 select_df = pd.DataFrame(diction)
-select_df.to_csv(args.output,index=0,header=0)
+sf = args.model + "_" + args.output
+select_df.to_csv(sf,index=0,header=0)
 
 #%%
 tEnd = time.time()
