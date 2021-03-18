@@ -12,7 +12,7 @@ parser.add_argument('--output',
                     help='output file name')
 
 parser.add_argument('-M', '--model',
-                    default='sklearn',
+                    default='prophet',
                     help='type of model')
 
 
@@ -145,8 +145,8 @@ elif args.model == 'prophet':
     from prophet import forecastByProphet
     # Train
     print('\n------Training------')    
-    VAL_pred = forecastByProphet(VAL_data2, 14)
-    val_rmse = _RMSE(VAL_pred, val_label)
+    val_pred = forecastByProphet(VAL_data2, 14)
+    val_rmse = _RMSE(val_pred, val_label)
     print("VAL_RMSE >>", round(val_rmse, 4))
     
     # Test
