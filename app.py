@@ -24,7 +24,7 @@ args = parser.parse_args()
 import numpy as np
 import pandas as pd
 import time
-from PreProcess import _PreProcess
+from PreProcess import _PreProcess, _PreProcess2
 
 #%%
 tStart = time.time()
@@ -137,6 +137,12 @@ elif args.model == 'sklearn':
     # Test
     print('\n------Testing------') 
     PRED = model.predict(TES_data.reshape(1, -1))
+
+
+#%% Prophet
+elif args.model == 'prophet':
+    from prophet import forecastByProphet
+    
 
 #%% Else
 else:

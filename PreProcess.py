@@ -45,6 +45,20 @@ def _PreProcess(fname):
 
     return train_data, train_label, val_data, val_label, test_data
 
+def _PreProcess2(fname):
+    # Path
+    fpath = "./data"
+    #fname = "training_data.csv"
+    # Read csv
+    Data = np.array(pd.read_csv(os.path.join(fpath, fname)))
+    # Data
+    train_data = Data[:790, 4]
+    val_label = Data[790:804, 4]
+    test_data = Data[:804, 4]
+
+    return train_data, val_label, test_data
+
+
 def _Plot(fname):
     fpath = "./data"
     Data = np.array(pd.read_csv(os.path.join(fpath, fname)))
