@@ -214,7 +214,7 @@ NCKU DSAI course homework
 
 ### 小節
 
-從上述三張驗證集的預測軌跡看來，以**pytorch最為理想**，\
+從上述三張驗證集的預測軌跡看來，以**Prophet最為理想**，\
 故本次作業我們選用該預測結果當作最終答案，\
 即檔名為：`submission.csv`
 
