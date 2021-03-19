@@ -15,20 +15,6 @@ parser.add_argument('-M', '--model',
                     default='sklearn',
                     help='type of model')
 
-    # GET PREDICT
-    if args.model == 'prophet':
-        from predictModel.Prophet import forecastByProphet
-        pred = forecastByProphet(df, num)
-    elif args.model == 'mlp':
-        from predictModel.MLP import forecastByMLP
-        pred = forecastByMLP(df, num)
-
-    
-    # OUTPUT
-    pred = np.round(pred, 0)
-    df_pred = pd.DataFrame({'date': predDate, 'predict': pred})
-    
-    df_pred.to_csv(args.output)
 
 args = parser.parse_args()
 
