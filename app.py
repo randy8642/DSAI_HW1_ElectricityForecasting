@@ -74,16 +74,16 @@ if args.model == 'pytorch':
     train_dataloader = torch.utils.data.DataLoader(dataset = train_dataset, batch_size=batch, shuffle=True)
 
     # Device
-    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    print("Device >> ", device)
+    # device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    # print("Device >> ", device)
 
     # Train
     model = m02(3, 30)
     optim = optim.Adam(model.parameters(), lr=lr)
     loss_F = nn.MSELoss()
 
-    model.to(device)
-    loss_F.to(device)
+    # model.to(device)
+    # loss_F.to(device)
 
     print('\n------Training------')
     for epoch in range(Epoch):
@@ -94,8 +94,8 @@ if args.model == 'pytorch':
             for n, (Data, Label) in enumerate(train_dataloader):
                 optim.zero_grad()
 
-                Data = Data.to(device)
-                Label = Label.to(device)
+                # Data = Data.to(device)
+                # Label = Label.to(device)
                 Pred = model(Data)
                 loss = loss_F(Pred, Label)
 
@@ -104,7 +104,7 @@ if args.model == 'pytorch':
 
             model.eval()
             with torch.no_grad():
-                 val_data = val_data.to(device)
+                #  val_data = val_data.to(device)
 
                  val_pred = model(val_data)
                  val_pred = val_pred.cpu().data.numpy()
@@ -117,7 +117,7 @@ if args.model == 'pytorch':
     print('\n------Testing------')
     model.eval()
     with torch.no_grad():
-         test_data = test_data.to(device)
+        #  test_data = test_data.to(device)
          PRED = model(test_data)
          PRED = PRED.cpu().data.numpy()
 
