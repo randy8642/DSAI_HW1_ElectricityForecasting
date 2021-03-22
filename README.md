@@ -75,29 +75,29 @@ NCKU DSAI course homework
 前處理方式可依模型分成下列兩種：
 
 * [PreProcess.__PreProcess](LINK)
-    >training data的範圍從 2019/01/02 至 2021/02/15\
-    >validation data的範圍從 2021/01/31 至 2021/03/01\
-    >testing dara的範圍從 2021/02/14 至 2021/03/15
+    >training data的範圍從 2019/01/02 至 2021/01/20\
+    >validation data的範圍從 2021/01/21 至 2021/02/19\
+    >testing dara的範圍從 2021/02/20 至 2021/03/21
 
     上述資料依30天的間隔，以步進為一天的方式進行切割，\
-    目的是利用前30天的資料，預測後14天的資料。\
+    目的是利用前30天的資料，預測後8天的資料。\
     故各資料的維度如下：
     |            | Training   | Validation | Testing  |
     |------------|------------|------------|----------|
-    | Data Dim.  | (747,30,3) | (1,30,3)   | (1,30,3) |
-    | Label Dim. | (747,14)   | (14)       |          |
+    | Data Dim.  | (721,30,3) | (1,30,3)   | (1,30,3) |
+    | Label Dim. | (721,8)    | (8)        |          |
 
 * [PreProcess.__PreProcess2](LINK)
-    >validation data的範圍從 2019/01/02 至 2021/03/01\
-    >testing dara的範圍從 2019/01/02 至 2021/03/15
+    >validation data的範圍從 2019/01/02 至 2021/03/13\
+    >testing dara的範圍從 2019/01/02 至 2021/03/21
 
     該處理方式為Prophet所設計，其輸入一段時間的資料 (**包含日期及資料**) 後，\
-    可輸出後14天的預測資料。\
+    可輸出後8天的預測資料。\
     同樣各資料的維度列表如下：
     |            | Training | Validation | Testing |
     |------------|----------|------------|---------|
-    | Data Dim.  |          | (790,3)    | (804,3) |
-    | Label Dim. |          | (14)       |         |
+    | Data Dim.  |          | (795,3)    | (810,3) |
+    | Label Dim. |          | (8)        |         |
 
 ## 模型
 
@@ -111,7 +111,7 @@ NCKU DSAI course homework
 
   ```python
   model = MLPRegressor(random_state=1,
-                      hidden_layer_sizes=(4),
+                      hidden_layer_sizes=(2),
                       activation="relu",
                       solver='adam',
                       batch_size=16,
@@ -120,11 +120,11 @@ NCKU DSAI course homework
                       max_iter=1000)
   ```
 
-* 使用validation data (2021/01/31 ~ 2021/03/01) 之預測值與實際值之RMSE為：\
+* 使用validation data (2021/01/21 至 2021/02/19) 之預測值與實際值之RMSE為：\
 \
-  **RMSE = 143.4088**
+  **RMSE = 116.3423**
 
-  ![SK_RMSE](https://i.imgur.com/lO29o5t.png)
+  ![SK_RMSE](https://i.imgur.com/UsI0luI.png)
 
 * 最終輸出檔名為：`sklearn_submission.csv`
 
@@ -145,7 +145,7 @@ NCKU DSAI course homework
               nn.Flatten(),
               nn.Linear(in_num*seq, 64),
               nn.ReLU(),
-              nn.Linear(64, 14)
+              nn.Linear(64, 8)
               )
       def forward(self, x):
           pred = self.FC(x)
@@ -163,11 +163,11 @@ NCKU DSAI course homework
   optim = optim.Adam(model.parameters(), lr=lr)
   ```
 
-* 使用validation data (2021/01/31 ~ 2021/03/01) 之預測值與實際值之RMSE為：\
+* 使用validation data (2021/01/21 至 2021/02/19) 之預測值與實際值之RMSE為：\
 \
-  **RMSE = 118.8234**
+  **RMSE = 110.0655**
 
-  ![PT_RMSE](https://i.imgur.com/yA1GX9H.png)
+  ![PT_RMSE](https://i.imgur.com/PFsdD4X.png)
 
 * 最終輸出檔名為：`pytorch_submission.csv`
 
@@ -199,16 +199,16 @@ NCKU DSAI course homework
   方可預測完成。
 
   ```python
-  val_pred = forecastByProphet(VAL_data2, 14)
+  val_pred = forecastByProphet(VAL_data2, 8)
   # VAL_data2: (time by data)
-  # val_pred: result of pred. (14)
+  # val_pred: result of pred. (8)
   ```
 
-* 使用validation data (2019/01/02 ~ 2021/03/01) 之預測值與實際值之RMSE為：\
+* 使用validation data (2019/01/02 至 2021/03/13) 之預測值與實際值之RMSE為：\
 \
-  **RMSE = 135.2348**
+  **RMSE = 98.4839**
 
-  ![PR_RMSE](https://i.imgur.com/84gHKtf.png)
+  ![PR_RMSE](https://i.imgur.com/xNUeRks.png)
 
 * 最終輸出檔名為：`prophet_submission.csv`
 

@@ -126,7 +126,7 @@ elif args.model == 'sklearn':
     from sklearn.neural_network import MLPRegressor
     # Train
     print('\n------Training------')
-    model = MLPRegressor(random_state=1, hidden_layer_sizes=(4), activation="relu",solver='adam', batch_size=batch, learning_rate="constant",
+    model = MLPRegressor(random_state=1, hidden_layer_sizes=(2), activation="relu",solver='adam', batch_size=batch, learning_rate="constant",
                          learning_rate_init=lr, max_iter=Epoch)
     model.fit(TRA_data.reshape(leng, -1), TRA_label)
 
@@ -145,28 +145,31 @@ elif args.model == 'prophet':
     from prophet import forecastByProphet
     # Train
     print('\n------Training------')
-    val_pred = forecastByProphet(VAL_data2, 14)
+    val_pred = forecastByProphet(VAL_data2, 8)
     val_rmse = _RMSE(val_pred, val_label)
     print("VAL_RMSE >>", round(val_rmse, 4))
 
     # Test
     print('\n------Testing------')
-    PRED = forecastByProphet(TES_data2, 14)
+    PRED = forecastByProphet(TES_data2, 8)
 
 #%% Else
 else:
     print("Could not use this model. See model list on README.")
 
 #%% Save
-np.save("val_pred.npy", val_pred)
+np.save(args.model + "_" + "val_pred.npy", val_pred)
 
 Date = []
 for i in range(7):
     Date.append(20210323+i)
 Value = PRED.squeeze()
 
+print("===TEST_PRED===")
+print(Value)
+
 diction = {"Date": Date,
-           "Value": Value[7:]
+           "Value": Value[1:]
            }
 select_df = pd.DataFrame(diction)
 sf = args.model + "_" + args.output

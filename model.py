@@ -15,7 +15,7 @@ class m01(nn.Module):
             nn.Flatten(),
             nn.Linear(out_num*seq*2, 64),
             nn.ReLU(),
-            nn.Linear(64, 14)
+            nn.Linear(64, 8)
             )
 
     def forward(self, x):
@@ -30,7 +30,7 @@ class m02(nn.Module):
             nn.Flatten(),
             nn.Linear(in_num*seq, 64),
             nn.ReLU(),
-            nn.Linear(64, 14)
+            nn.Linear(64, 8)
             )
 
     def forward(self, x):
@@ -46,7 +46,7 @@ class m03(nn.Module):
             nn.ReLU(),
             nn.Linear(1024, 64),
             nn.ReLU(),
-            nn.Linear(64, 14)
+            nn.Linear(64, 8)
             )
 
     def forward(self, x):
