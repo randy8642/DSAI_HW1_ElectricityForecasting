@@ -172,7 +172,8 @@ diction = {"Date": Date,
            "Value": Value[1:]
            }
 select_df = pd.DataFrame(diction)
-sf = args.model + "_" + args.output
+# sf = args.model + "_" + args.output
+sf = args.output
 select_df.to_csv(sf,index=0,header=0)
 
 #%%

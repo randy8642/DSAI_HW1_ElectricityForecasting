@@ -126,7 +126,6 @@ NCKU DSAI course homework
 
   ![SK_RMSE](https://i.imgur.com/UsI0luI.png)
 
-* 最終輸出檔名為：`sklearn_submission.csv`
 
 ### Pytorch
 
@@ -169,7 +168,6 @@ NCKU DSAI course homework
 
   ![PT_RMSE](https://i.imgur.com/PFsdD4X.png)
 
-* 最終輸出檔名為：`pytorch_submission.csv`
 
 ### Prophet
 
@@ -212,7 +210,6 @@ NCKU DSAI course homework
 
   ![PR_RMSE](https://i.imgur.com/xNUeRks.png)
 
-* 最終輸出檔名為：`prophet_submission.csv`
 
 ### 小節
 
