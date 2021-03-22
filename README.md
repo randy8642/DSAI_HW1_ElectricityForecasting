@@ -23,7 +23,7 @@ NCKU DSAI course homework
 `cd /d [path/to/this/project]`
 2. 安裝套件\
 `pip install -r requirements.txt`
-3. 執行\
+3. 執行(若無特殊需求,請使用prophet)\
 `python app.py --training training_data.csv --output submission.csv --model [model name]`
       * model種類：
          * sklearn
