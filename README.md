@@ -15,8 +15,11 @@ NCKU DSAI course homework
 * Ubuntu 16.04.3 LTS
 
 ## 使用方式
-
-1. 進入專案資料夾\
+1. 更新\
+`apt-get update`
+2. 確認安裝 build-essential\
+`apt-get install build-essential`
+3. 進入專案資料夾\
 `cd /d [path/to/this/project]`
 2. 安裝套件\
 `pip install -r requirements.txt`
