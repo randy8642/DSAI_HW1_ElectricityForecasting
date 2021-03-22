@@ -23,9 +23,9 @@ NCKU DSAI course homework
 3. 執行\
 `python app.py --training training_data.csv --output submission.csv --model [model name]`
       * model種類：
-         * sklearn (default)
+         * sklearn
          * pytoch
-         * prophet
+         * prophet (default)
 
 ## 資料來源
 
@@ -174,6 +174,8 @@ NCKU DSAI course homework
 ### Prophet
 
 [官方網站](https://facebook.github.io/prophet/)
+
+* `python app.py --training training_data.csv --output submission.csv --model prophet`
 
 * 安裝步驟 (python 3.6.4)
 
